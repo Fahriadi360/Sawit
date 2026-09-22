@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web-GIS Pelaporan Penanaman Sawit | PT. ENERGI MAJU JAYA</title>
+    
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS & Draw CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <!-- Custom CSS Enterprise -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+    <!-- Sidebar Navigasi -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="brand-badge">
+                <i class="fas fa-tree brand-icon"></i>
+            </div>
+            <div class="brand-text-group">
+                <span class="logo-text">PT. EMJ<span class="highlight"> GIS</span></span>
+                <span class="brand-sub">ESTATE SEI SEMUJUR</span>
+            </div>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li class="menu-item active" data-target="page-dashboard">
+                <i class="fas fa-chart-pie"></i>
+                <span class="menu-text">Executive Dashboard</span>
+            </li>
+            <li class="menu-item" data-target="page-map">
+                <i class="fas fa-map-location-dot"></i>
+                <span class="menu-text">Peta GIS & Citra ECW</span>
+            </li>
+            <li class="menu-item" data-target="page-form">
+                <i class="fas fa-clipboard-list"></i>
+                <span class="menu-text">Input Kegiatan Tanam</span>
+            </li>
+            <li class="menu-item" data-target="page-upload">
+                <i class="fas fa-layer-group"></i>
+                <span class="menu-text">Upload Layer Spasial</span>
+            </li>
+            <li class="menu-item" data-target="page-rekap">
+                <i class="fas fa-table-cells"></i>
+                <span class="menu-text">Rekapitulasi Kegiatan</span>
+            </li>
+            <li class="menu-item admin-only" data-target="page-settings">
+                <i class="fas fa-sliders"></i>
+                <span class="menu-text">Pengaturan & Database</span>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <div class="system-status-indicator">
+                <span class="status-dot online"></span>
+                <span class="status-text">GIS Engine Online</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content" id="mainContent">
+        
+        <!-- Header Atas -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="hamburger-menu" id="hamburgerMenu" title="Buka/Tutup Menu">
+                    <i class="fas fa-bars-staggered"></i>
+                </button>
+                <div class="title-meta">
+                    <h2 class="app-title">Sistem Pelaporan Penanaman Kelapa Sawit</h2>
+                    <span class="app-breadcrumb">PT. ENERGI MAJU JAYA &bull; Rayon 1 &bull; Tahun Tanam 2026</span>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <!-- Tombol Akses Cepat TTD Online -->
+                <button type="button" class="btn btn-xs btn-outline-clean" onclick="openSignatureModal('manager')" title="Buka Panel Tanda Tangan Digital">
+                    <i class="fas fa-signature text-emerald mr-1"></i> TTD Online
+                </button>
+
+                <!-- Role Switcher Quick Pill -->
+                <div class="role-switcher-dropdown">
+                    <select class="select-role-pill" onchange="switchUserRole(this.value)" title="Ganti Peran Pengguna">
+                        <option value="admin">Peran: Administrator</option>
+                        <option value="mandor">Peran: Mandor Lapangan</option>
+                        <option value="manager">Peran: Estate Manager</option>
+                    </select>
+                </div>
+
+                <!-- User Profile Menu -->
+                <div class="user-profile" onclick="openEditProfileModal()" title="Klik untuk edit profil">
+                    <img id="topUserAvatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="avatar">
+                    <div class="user-info-text">
+                        <span class="user-name" id="topUserName">Ir. Bambang Wijaya</span>
+                        <span class="badge badge-primary-role" id="topUserRoleBadge">ADMIN</span>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-sm btn-icon btn-ghost" onclick="handleLogout()" title="Keluar">
+                    <i class="fas fa-arrow-right-from-bracket text-muted"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Container Halaman (SPA) -->
+        <div class="pages-container">
+            
+            <!-- HALAMAN 1: DASHBOARD -->
+            <section class="page active" id="page-dashboard">
+                <div class="page-header-flex">
+                    <div>
+                        <h3 class="page-heading">Monitoring Penanaman Kelapa Sawit</h3>
+                        <p class="subtitle">Rekapitulasi operasional real-time Blok OPD A & OPD C berdasarkan data standar PT. EMJ</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-emerald btn-sm" onclick="openReportPeriodModal()">
+                            <i class="fas fa-file-pdf mr-1"></i> Cetak Laporan PDF (Landscape)
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 4 KPI Cards Enterprise -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon-box bg-slate-subtle text-cyan">
+                            <i class="fas fa-map"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <p class="kpi-label">Luas Area Kebun</p>
+                            <h3 class="kpi-value" id="kpiTotalLuas">26.69 Ha</h3>
+                            <p class="kpi-desc" id="descTotalLuas">4 Blok Aktif (SPH 138)</p>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon-box bg-emerald-subtle text-emerald">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <p class="kpi-label">Realisasi Tanam</p>
+                            <h3 class="kpi-value" id="kpiTotalTertanam">4.47 Ha</h3>
+                            <p class="kpi-desc" id="descTotalTertanam">617 Pokok Tertanam</p>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon-box bg-amber-subtle text-amber">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <p class="kpi-label">Progress Rata-Rata</p>
+                            <h3 class="kpi-value" id="kpiAvgProgress">16.7%</h3>
+                            <p class="kpi-desc" id="descAvgProgress">Sisa 22.22 Ha belum tertanam</p>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-icon-box bg-purple-subtle text-purple">
+                            <i class="fas fa-users-gear"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <p class="kpi-label">Total Tenaga Kerja</p>
+                            <h3 class="kpi-value" id="kpiTotalHK">24 Orang</h3>
+                            <p class="kpi-desc" id="descTotalHK">Catatan Kegiatan Tercatat</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="card-header-clean">
+                            <h4 class="card-title">Trend Realisasi Tanam & Pembuatan Lubang (Ha)</h4>
+                            <span class="text-xs text-muted">Berdasarkan Harian Kerja</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chartTrend"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="card-header-clean">
+                            <h4 class="card-title">Progress Fisik Per Blok (%)</h4>
+                            <span class="text-xs text-muted">Target SPH 138</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chartBlok"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pipeline Status -->
+                <div class="pipeline-card">
+                    <div class="card-header-clean">
+                        <h4 class="card-title">Distribusi Status Pelaksanaan Blok</h4>
+                    </div>
+                    <div class="pipeline-bars">
+                        <div class="pipe-bar pipe-belum" style="width: 50%;">
+                            <span class="pipe-label">Belum Mulai (2 Blok)</span>
+                        </div>
+                        <div class="pipe-bar pipe-berjalan" style="width: 50%;">
+                            <span class="pipe-label">Sedang Berjalan (2 Blok)</span>
+                        </div>
+                        <div class="pipe-bar pipe-selesai" style="width: 0%;">
+                            <span class="pipe-label">Selesai (0 Blok)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rekap Progress Blok Prioritas -->
+                <div class="table-card">
+                    <div class="card-header-clean">
+                        <h4 class="card-title">Rekapitulasi Kemajuan Blok Perkebunan (PT. EMJ)</h4>
+                        <button class="btn btn-xs btn-outline-clean" onclick="document.querySelector('[data-target=\'page-rekap\']').click()">
+                            Lihat Rincian Harian
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Kode Blok</th>
+                                    <th>Afdeling</th>
+                                    <th>Luas Area</th>
+                                    <th>Target Pokok</th>
+                                    <th>Realisasi Tanam</th>
+                                    <th>Progress Bar</th>
+                                    <th>Status Pelaksanaan</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HALAMAN 2: PETA GIS & CITRA OFFLINE ECW -->
+            <section class="page" id="page-map">
+                <div class="map-wrapper">
+                    <div id="mapContainer"></div>
+                    
+                    <!-- Floating Map Controls Enterprise -->
+                    <div class="map-controls-panel">
+                        <div class="panel-header-clean">
+                            <i class="fas fa-layer-group text-emerald mr-1"></i>
+                            <span class="font-bold text-sm">Kontrol Peta & Layer</span>
+                        </div>
+                        <hr class="panel-divider">
+
+                        <div class="control-group">
+                            <label class="control-label">Pilihan Basemap</label>
+                            <select class="form-control-clean" id="mapBasemapSelect">
+                                <option value="satellite">🛰️ Satelit Resolusi Tinggi (Esri)</option>
+                                <option value="dark">🌙 Dark Slate (Kontras Tinggi)</option>
+                                <option value="osm">🗺️ OpenStreetMap Jalan</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group mt-3">
+                            <label class="control-label">Layer Vektor</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="toggleBlokLayer" checked>
+                                <span class="slider"></span>
+                                <span class="toggle-text">Batas Blok Kebun PT. EMJ</span>
+                            </label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="toggleGpsLayer" checked>
+                                <span class="slider"></span>
+                                <span class="toggle-text">Titik Laporan Mandor</span>
+                            </label>
+                        </div>
+
+                        <!-- Fitur Citra Offline Format ECW / Orthophoto -->
+                        <div class="control-group mt-3 p-2 bg-subtle rounded border-subtle">
+                            <div class="flex-between mb-1">
+                                <label class="control-label m-0 text-emerald font-semibold">
+                                    <i class="fas fa-satellite mr-1"></i> Citra Offline (ECW / Drone)
+                                </label>
+                                <button type="button" class="btn-text-xs" onclick="openEcwGuideModal()" title="Panduan konversi file ECW">
+                                    <i class="fas fa-circle-question"></i> Info ECW
+                                </button>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="toggleOfflineCitra">
+                                <span class="slider"></span>
+                                <span class="toggle-text">Tampilkan Citra Lokal Kebun</span>
+                            </label>
+                            <div class="mt-2">
+                                <div class="flex-between text-xs text-muted mb-1">
+                                    <span>Transparansi Citra:</span>
+                                </div>
+                                <input type="range" id="sliderCitraOpacity" min="0.1" max="1" step="0.05" value="0.85" style="width:100%;">
+                            </div>
+                            <!-- Tombol Upload Citra Orthophoto Lokal -->
+                            <button type="button" class="btn btn-xs btn-outline-clean w-100 mt-2" onclick="openUploadOrthophotoModal()">
+                                <i class="fas fa-cloud-arrow-up text-emerald mr-1"></i> Muat Orthophoto Lokal
+                            </button>
+                        </div>
+
+                        <div class="map-legend mt-3">
+                            <span class="control-label">Legenda Status Blok</span>
+                            <div class="legend-item"><span class="legend-color legend-green"></span> Selesai (100%)</div>
+                            <div class="legend-item"><span class="legend-color legend-yellow"></span> Sedang Tanam (OPD A, OPD C)</div>
+                            <div class="legend-item"><span class="legend-color legend-red"></span> Belum Mulai (OPD B, OPD D)</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HALAMAN 3: INPUT KEGIATAN TANAM (SESUAI EXCEL PT. EMJ) -->
+            <section class="page" id="page-form">
+                <div class="page-header">
+                    <h3 class="page-heading">Formulir Laporan Kegiatan Lapangan</h3>
+                    <p class="subtitle">Format baku operasional perkebunan kelapa sawit PT. ENERGI MAJU JAYA</p>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-card">
+                        <form id="formKegiatanPTEMJ">
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="selectBlok">Pilih Blok Tanam <span class="text-danger">*</span></label>
+                                    <select id="selectBlok" class="form-control" required></select>
+                                </div>
+                                <div class="form-group half">
+                                    <label for="tglKegiatan">Tanggal Kegiatan <span class="text-danger">*</span></label>
+                                    <input type="date" id="tglKegiatan" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="selectKegiatan">Jenis Kegiatan <span class="text-danger">*</span></label>
+                                <select id="selectKegiatan" class="form-control" required>
+                                    <option value="" disabled selected>-- Pilih Kegiatan Operasional --</option>
+                                    <option value="Pancang tanam">Pancang tanam (Pancang barisan & titik tanam)</option>
+                                    <option value="Pembuatan ajir">Pembuatan ajir (Pcs)</option>
+                                    <option value="Pembuatan lubang tanam">Pembuatan lubang tanam (60x60x40 cm)</option>
+                                    <option value="Bongkar muat bibit dari truk ke terminal bibit">Bongkar muat bibit dari truk ke terminal bibit (Pkk)</option>
+                                    <option value="Langsir bibit dari terminal ke titik tanam">Langsir bibit dari terminal ke titik tanam</option>
+                                    <option value="Tanam">Tanam (Aplikasi pupuk & penanaman bibit)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="jmlTenagaKerja">Jumlah Tenaga Kerja (Orang) <span class="text-danger">*</span></label>
+                                    <input type="number" id="jmlTenagaKerja" class="form-control" min="1" max="50" value="2" required>
+                                </div>
+                                <div class="form-group half">
+                                    <label for="selectUom">Satuan Hasil (UOM) <span class="text-danger">*</span></label>
+                                    <select id="selectUom" class="form-control" required>
+                                        <option value="Ha">Ha (Hektar)</option>
+                                        <option value="Pkk">Pkk (Pokok Sawit)</option>
+                                        <option value="Pcs">Pcs (Batang Ajir)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="namaTenagaKerja">Nama-Nama Tenaga Kerja</label>
+                                <input type="text" id="namaTenagaKerja" class="form-control" placeholder="Misal: 1. Sunardi  2. Dedy  3. Fajri">
+                            </div>
+
+                            <div class="form-row-3">
+                                <div class="form-group">
+                                    <label for="realisasiJumlah">Realisasi Hari Ini <span class="text-danger">*</span></label>
+                                    <input type="number" step="0.01" id="realisasiJumlah" class="form-control font-bold text-emerald" placeholder="0.00" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="todateJumlah">Todate (Akumulasi)</label>
+                                    <input type="number" step="0.01" id="todateJumlah" class="form-control bg-slate-subtle" placeholder="0.00" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sisaHa">Sisa Luas (Ha)</label>
+                                    <input type="text" id="sisaHa" class="form-control bg-slate-subtle font-semibold" placeholder="-" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="catatanKegiatan">Keterangan / Kendala Lapangan</label>
+                                <textarea id="catatanKegiatan" class="form-control" rows="2" placeholder="Catatan cuaca, kondisi tanah berbatu, pengiriman bibit..."></textarea>
+                            </div>
+
+                            <div class="form-group gps-group">
+                                <label>Koordinat Lokasi GPS Mandor</label>
+                                <div class="gps-display">
+                                    <i class="fas fa-location-crosshairs text-emerald"></i>
+                                    <span id="gpsLat">Lat: Mengambil data...</span> , 
+                                    <span id="gpsLng">Lng: Mengambil data...</span>
+                                    <button type="button" class="btn btn-xs btn-secondary" id="btnRefreshGps" title="Segarkan GPS">
+                                        <i class="fas fa-rotate"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Dokumentasi Foto Lapangan</label>
+                                <div class="camera-capture">
+                                    <i class="fas fa-camera camera-icon"></i>
+                                    <p class="text-xs text-muted m-0">Klik untuk mengambil foto bukti fisik kegiatan</p>
+                                </div>
+                                <input type="file" accept="image/*" capture="environment" class="file-hidden" id="photoInput">
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="reset" class="btn btn-secondary" onclick="resetFormPTEMJ()">Reset</button>
+                                <button type="submit" class="btn btn-emerald" id="btnSubmitReport">
+                                    <i class="fas fa-save mr-1"></i> Simpan Laporan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="form-map-card">
+                        <div class="card-header-clean">
+                            <h4 class="card-title">Lokasi Blok Terpilih</h4>
+                        </div>
+                        <div id="miniMapContainer" class="mini-map"></div>
+                        <div class="blok-info-panel mt-3">
+                            <h5 id="infoBlokName" class="font-bold text-white mb-2">Pilih Blok di Formulir</h5>
+                            <ul class="info-list">
+                                <li><span>Luas Area Efektif:</span> <b id="infoLuas">-</b></li>
+                                <li><span>Standar Kerapatan:</span> <b id="infoSph">-</b></li>
+                                <li><span>Estimasi Kebutuhan Bibit:</span> <b id="displayTargetPokok">-</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HALAMAN 4: UPLOAD & MANAJEMEN LAYER SPASIAL -->
+            <section class="page" id="page-upload">
+                <div class="page-header">
+                    <h3 class="page-heading">Manajemen Layer Spasial & Orthophoto Kebun</h3>
+                    <p class="subtitle">Unggah berkas Shapefile ArcGIS (.shp/.zip), KML, DXF AutoCAD, GeoJSON, atau Orthophoto</p>
+                </div>
+
+                <div class="upload-container">
+                    <div class="upload-dropzone" id="dropzone">
+                        <i class="fas fa-cloud-arrow-up upload-icon"></i>
+                        <h4>Tarik & Letakkan File GIS / Spasial Disini</h4>
+                        <p class="text-sm text-muted">Mendukung format Shapefile ArcGIS, KML, DXF AutoCAD, GeoJSON</p>
+                        <div class="accepted-formats">
+                            <span class="badge badge-format">Shapefile (.zip)</span>
+                            <span class="badge badge-format">Google Earth (.kml)</span>
+                            <span class="badge badge-format">AutoCAD (.dxf)</span>
+                            <span class="badge badge-format">GeoJSON (.json)</span>
+                        </div>
+                        <input type="file" id="fileUploadGis" class="file-hidden" accept=".zip,.kml,.kmz,.geojson,.json,.dxf">
+                    </div>
+
+                    <div class="upload-details" id="uploadDetails" style="display: none;">
+                        <div class="file-info-card">
+                            <div class="file-icon"><i class="fas fa-file-shield text-emerald"></i></div>
+                            <div class="file-name-size">
+                                <h5 id="selectedFileName">layer_kebun.zip</h5>
+                                <p id="selectedFileSize">0 KB</p>
+                            </div>
+                            <button type="button" class="btn btn-xs btn-danger btn-icon" id="btnCancelFile"><i class="fas fa-xmark"></i></button>
+                        </div>
+                        
+                        <div class="form-group mt-3">
+                            <label for="namaLayer">Nama Layer Spasial</label>
+                            <input type="text" id="namaLayer" class="form-control" placeholder="Contoh: Batas HGU, Jalan Poros, Kontur Terasering">
+                        </div>
+                        
+                        <button type="button" class="btn btn-emerald w-100 mt-2" id="btnUploadLayer">
+                            <i class="fas fa-map-pin mr-1"></i> Tampilkan & Simpan ke Peta
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tabel Manajemen Layer Kustom (Bisa Update & Hapus) -->
+                <div class="table-card mt-4">
+                    <div class="card-header-clean">
+                        <div>
+                            <h4 class="card-title">Daftar Layer Spasial Terdaftar</h4>
+                            <span class="text-xs text-muted">Kelola visibilitas, perbarui data spasial, atau hapus layer</span>
+                        </div>
+                        <button type="button" class="btn btn-xs btn-outline-clean" onclick="openUploadOrthophotoModal()">
+                            <i class="fas fa-satellite mr-1"></i> Muat Citra Orthophoto
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nama Layer</th>
+                                    <th>Format Sumber</th>
+                                    <th>Tanggal Unggah</th>
+                                    <th>Visibilitas Peta</th>
+                                    <th>Aksi Manajemen</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HALAMAN 5: REKAPITULASI DATA LENGKAP -->
+            <section class="page" id="page-rekap">
+                <div class="page-header-flex">
+                    <div>
+                        <h3 class="page-heading">Rekapitulasi Laporan Harian (Standar PT. EMJ)</h3>
+                        <p class="subtitle" id="rekapRecordCount">Menampilkan catatan kegiatan operasional perkebunan</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-emerald btn-sm" onclick="openReportPeriodModal()">
+                            <i class="fas fa-file-pdf mr-1"></i> Cetak Rekap (PDF Landscape)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-responsive">
+                        <table class="data-table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25px;">No</th>
+                                    <th>Tanggal</th>
+                                    <th>TK</th>
+                                    <th>Nama Tenaga Kerja</th>
+                                    <th>Kegiatan Operasional</th>
+                                    <th>Blok</th>
+                                    <th>Luas</th>
+                                    <th>UOM</th>
+                                    <th>Realisasi</th>
+                                    <th>Todate</th>
+                                    <th>Sisa (Ha)</th>
+                                    <th>Keterangan</th>
+                                    <th>Foto</th>
+                                    <th style="width: 80px; text-align: center;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HALAMAN 6: PENGATURAN & DATABASE MASTER BLOK (ADMIN ONLY) -->
+            <section class="page" id="page-settings">
+                <div class="page-header">
+                    <h3 class="page-heading">Pengaturan Sistem, Database Blok & Aturan Tanam</h3>
+                    <p class="subtitle">Kelola master perimeter blok, konfigurasi jarak tanam (SPH), dan identitas resmi perusahaan</p>
+                </div>
+
+                <!-- 1. DATABASE MASTER BLOK KEBUN (CRUD) -->
+                <div class="table-card mb-4">
+                    <div class="card-header-clean">
+                        <div>
+                            <h4 class="card-title text-emerald"><i class="fas fa-database mr-2"></i>Database Master Blok Kebun</h4>
+                            <span class="text-xs text-muted">Daftar blok yang terhubung ke formulir input, perhitungan realisasi, dan peta</span>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-emerald" onclick="openAddBlokModal()">
+                            <i class="fas fa-plus mr-1"></i> Tambah Blok Baru
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Kode Blok</th>
+                                    <th>Afdeling</th>
+                                    <th>Luas (Ha)</th>
+                                    <th>Pola & Jarak Tanam</th>
+                                    <th>Target SPH</th>
+                                    <th>Target Pokok</th>
+                                    <th>Varietas Bibit</th>
+                                    <th>Tahun Tanam</th>
+                                    <th style="width: 120px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="masterBlokTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 2. PENGATURAN ATURAN TANAM & IDENTITAS PERUSAHAAN -->
+                <div class="form-grid">
+                    <div class="form-card">
+                        <h4 class="font-bold text-white mb-3"><i class="fas fa-ruler-combined text-emerald mr-2"></i>Aturan Tanam & Standar Kerapatan (SPH)</h4>
+                        
+                        <div class="mb-3">
+                            <label class="form-label-xs">Preset Standar Agronomi Kelapa Sawit:</label>
+                            <div class="planting-rule-presets">
+                                <div class="rule-preset-btn active" onclick="document.getElementById('setStandardSph').value=138; showToast('Aturan tanam diubah ke Mata Lima 9x9 (138 SPH)', 'success');">
+                                    <span class="rule-preset-title">Mata Lima 9x9</span>
+                                    <span class="rule-preset-sph">138 SPH (Standar PT. EMJ)</span>
+                                </div>
+                                <div class="rule-preset-btn" onclick="document.getElementById('setStandardSph').value=138; showToast('Aturan tanam diubah ke Segiempat 9x8 (138 SPH)', 'success');">
+                                    <span class="rule-preset-title">Segiempat 9x8</span>
+                                    <span class="rule-preset-sph">138 SPH</span>
+                                </div>
+                                <div class="rule-preset-btn" onclick="document.getElementById('setStandardSph').value=143; showToast('Aturan tanam diubah ke Mata Lima Murni (143 SPH)', 'success');">
+                                    <span class="rule-preset-title">Mata Lima 9x9 (Teoritis)</span>
+                                    <span class="rule-preset-sph">143 SPH Murni</span>
+                                </div>
+                                <div class="rule-preset-btn" onclick="document.getElementById('setStandardSph').value=160; showToast('Aturan tanam diubah ke Kerapatan Tinggi 8.5x8.5 (160 SPH)', 'success');">
+                                    <span class="rule-preset-title">Kerapatan 8.5x8.5</span>
+                                    <span class="rule-preset-sph">160 SPH (High Density)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="panel-divider my-3">
+                        <h4 class="font-bold text-white mb-3"><i class="fas fa-building text-emerald mr-2"></i>Identitas Badan Usaha</h4>
+
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="setCompanyName">Nama Perusahaan Lengkap</label>
+                                <input type="text" id="setCompanyName" class="form-control" value="PT. ENERGI MAJU JAYA">
+                            </div>
+                            <div class="form-group half">
+                                <label for="setCompanyAbbr">Singkatan / Kode Entitas</label>
+                                <input type="text" id="setCompanyAbbr" class="form-control" value="PT. EMJ">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <label for="setEstateName">Nama Unit Kebun / Estate</label>
+                                <input type="text" id="setEstateName" class="form-control" value="Estate Sei Semujur">
+                            </div>
+                            <div class="form-group half">
+                                <label for="setStandardSph">Standar SPH Acuan</label>
+                                <input type="number" id="setStandardSph" class="form-control font-bold text-emerald" value="138">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="setCompanyAddress">Alamat Kebun / Kantor Lapangan</label>
+                            <input type="text" id="setCompanyAddress" class="form-control" value="Jl. Poros Perkebunan Kelapa Sawit Km 18, Kalimantan Barat">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="setCompanyContact">Kontak Resmi (Email & Telepon)</label>
+                            <input type="text" id="setCompanyContact" class="form-control" value="info@pt-emj.co.id | Telp: (0561) 789012">
+                        </div>
+
+                        <hr class="panel-divider my-3">
+                        <div class="flex-between mb-3">
+                            <h4 class="font-bold text-white m-0"><i class="fas fa-signature text-emerald mr-2"></i>Pejabat Penandatangan Laporan</h4>
+                            <button type="button" class="btn btn-xs btn-outline-clean" onclick="openSignatureModal('manager')">
+                                <i class="fas fa-pen-nib mr-1"></i> Atur TTD Online
+                            </button>
+                        </div>
+
+                        <div class="form-row-3">
+                            <div class="form-group">
+                                <label for="setSignMandor">Mandor Lapangan</label>
+                                <input type="text" id="setSignMandor" class="form-control" value="Joko Susanto">
+                            </div>
+                            <div class="form-group">
+                                <label for="setSignAsisten">Asisten Kebun / Divisi</label>
+                                <input type="text" id="setSignAsisten" class="form-control" value="Ir. Bambang Wijaya">
+                            </div>
+                            <div class="form-group">
+                                <label for="setSignManager">Estate Manager</label>
+                                <input type="text" id="setSignManager" class="form-control" value="Drs. Hendrawan, M.Si.">
+                            </div>
+                        </div>
+
+                        <div class="form-actions mt-3">
+                            <button type="button" class="btn btn-emerald" onclick="saveCompanySettingsFromUI()">
+                                <i class="fas fa-check mr-1"></i> Simpan Pengaturan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Panel Info Teknis -->
+                    <div class="form-map-card">
+                        <h4 class="font-bold text-white mb-2"><i class="fas fa-shield-halved text-emerald mr-2"></i>Parameter Teknis GIS & ERP</h4>
+                        
+                        <div class="p-3 bg-subtle rounded border-subtle mb-3">
+                            <div class="text-xs text-muted mb-1">Rumus Standar Mata Lima:</div>
+                            <div class="text-xs text-slate-200">
+                                <code>SPH = 10.000 / (Jarak Pokok &times; Jarak Baris)</code><br>
+                                Pada jarak 9m &times; 9m dengan barisan 7.794m menghasilkan kerapatan efektif 138 - 143 pokok per hektar.
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-subtle rounded border-subtle mb-3">
+                            <div class="text-xs text-muted mb-1">Penyimpanan Tanda Tangan:</div>
+                            <div class="text-xs text-emerald">
+                                <i class="fas fa-circle-check mr-1"></i> Tersedia penyimpanan tanda tangan digital langsung pada peramban.
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-subtle rounded border-subtle">
+                            <div class="text-xs text-muted mb-1">Dukungan Citra Satelit:</div>
+                            <div class="text-xs text-slate-300">
+                                Mendukung overlay citra drone orthophoto lokal offline dengan penetapan batas koordinat (*bounding box*) otomatis.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Success Modal Popup -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-card">
+            <div class="modal-icon text-emerald" style="text-align: center;">
+                <i class="fas fa-circle-check fa-3x"></i>
+            </div>
+            <h3 class="font-bold text-white mt-2" style="text-align: center;">Laporan Berhasil Disimpan!</h3>
+            <p class="text-xs text-muted mt-1" style="text-align: center;">Data kegiatan operasional tanam telah terakumulasi ke database perkebunan PT. EMJ.</p>
+            <button type="button" class="btn btn-emerald mt-3 w-100" onclick="document.getElementById('successModal').classList.remove('show')">
+                Lanjutkan
+            </button>
+        </div>
+    </div>
+
+    <!-- CDN Libraries -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/shpjs@4.0.4/dist/shp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mapbox/togeojson@0.16.2/togeojson.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dxf-parser@1.1.2/dist/dxf-parser.min.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/report-pdf.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/form.js"></script>
+    <script src="js/gis-upload.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>

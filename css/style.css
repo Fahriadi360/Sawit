@@ -741,6 +741,67 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     max-height: calc(100vh - 120px);
     overflow-y: auto;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.22s ease;
+}
+
+.map-controls-panel.collapsed {
+    transform: translateX(calc(100% + 30px));
+    opacity: 0;
+    pointer-events: none;
+}
+
+.btn-float-open-controls {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    height: 38px;
+    padding: 0 14px;
+    border-radius: 20px;
+    background: rgba(17, 24, 39, 0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-color);
+    color: var(--emerald);
+    font-size: 12px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    z-index: 998;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    transition: all var(--transition-fast);
+}
+
+.btn-float-open-controls:hover {
+    background: var(--bg-card-hover);
+    color: #fff;
+    border-color: var(--emerald);
+    transform: translateY(-2px);
+}
+
+.map-coord-readout {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xs);
+    padding: 4px 10px;
+    font-size: 11px;
+    font-family: monospace;
+    color: #94a3b8;
+    z-index: 990;
+    pointer-events: none;
+    display: flex;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.map-coord-readout .coord-val {
+    color: var(--emerald);
+    font-weight: 700;
 }
 
 .panel-header-clean {
@@ -1344,18 +1405,920 @@ input:checked + .slider:before { transform: translateX(14px); }
 }
 
 /* =========================================================================
-   RESPONSIVE ADJUSTMENTS
+   LOGIN SPLIT-SCREEN ENTERPRISE (media_1790061422890.png)
    ========================================================================= */
-@media (max-width: 992px) {
-    .charts-row, .form-grid { grid-template-columns: 1fr; }
+.login-split-wrapper {
+    min-height: 100vh;
+    width: 100vw;
+    background: #070b14;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    position: relative;
+    z-index: 10000;
+    overflow-y: auto;
+}
+
+.login-split-card {
+    display: flex;
+    width: 100%;
+    max-width: 1080px;
+    min-height: 640px;
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+}
+
+/* Sisi Kiri: Visual Perkebunan & Slogan Korporat */
+.login-visual-side {
+    flex: 1.15;
+    position: relative;
+    background: url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80') center center / cover no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 44px;
+    color: #ffffff;
+}
+
+.login-visual-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(6, 15, 28, 0.84) 0%, rgba(10, 24, 40, 0.95) 100%);
+    backdrop-filter: blur(2px);
+    z-index: 1;
+}
+
+.login-brand-header,
+.login-visual-content,
+.login-visual-quote,
+.login-visual-footer {
+    position: relative;
+    z-index: 2;
+}
+
+.login-brand-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.login-brand-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+}
+
+.login-brand-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--emerald) 0%, #059669 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+}
+
+.login-visual-content {
+    margin: 32px 0;
+    max-width: 460px;
+}
+
+.login-display-title, .quote-title {
+    font-size: 25px;
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: 14px;
+    color: #ffffff;
+}
+
+.login-display-desc, .quote-subtitle {
+    font-size: 13.5px;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.quote-stats-row {
+    display: flex;
+    gap: 20px;
+}
+
+.quote-stat-item {
+    border-left: 2px solid var(--emerald);
+    padding-left: 12px;
+}
+
+.stat-number {
+    display: block;
+    font-size: 16px;
+    font-weight: 800;
+    color: #f8fafc;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.login-visual-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11.5px;
+    color: #94a3b8;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 16px;
+}
+
+.login-social-links {
+    display: flex;
+    gap: 12px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+/* Sisi Kanan: Form Autentikasi */
+.login-form-side {
+    flex: 1;
+    background: #0e1526;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 44px;
+}
+
+.login-form-inner {
+    width: 100%;
+    max-width: 380px;
+}
+
+.login-form-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: #ffffff;
+}
+
+.login-form-sub {
+    font-size: 12.5px;
+    color: #94a3b8;
+    margin-bottom: 22px;
+    line-height: 1.5;
+}
+
+.alert-login-error {
+    background: rgba(239, 68, 68, 0.14);
+    border-left: 3px solid #ef4444;
+    color: #fca5a5;
+    padding: 10px 12px;
+    border-radius: var(--radius-xs);
+    font-size: 12px;
+    margin-bottom: 16px;
+}
+
+.form-floating-field label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #cbd5e1;
+    margin-bottom: 6px;
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon .field-icon {
+    position: absolute;
+    right: 14px;
+    color: #64748b;
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.form-input-line {
+    width: 100%;
+    padding: 11px 40px 11px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-sm);
+    color: #ffffff;
+    font-size: 13px;
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.form-input-line:focus {
+    border-color: var(--emerald);
+    background: rgba(16, 185, 129, 0.04);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.login-options-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.remember-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.remember-checkbox input[type="checkbox"] {
+    accent-color: var(--emerald);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.btn-login-action {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--emerald) 0%, #059669 100%);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: #ffffff;
+    font-size: 13.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-login-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    color: #042f20;
+}
+
+.quick-login-pills {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 16px;
+}
+
+.quick-login-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.quick-btns-row {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-quick-pill {
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-quick-pill:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+}
+
+/* =========================================================================
+   TOP HORIZONTAL PILL NAVIGATION BAR (media_1790061518969.png)
+   ========================================================================= */
+.top-pill-nav {
+    display: none; /* Disembunyikan di desktop lebar, aktif di tablet & HP */
+    background: #0e1526;
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 14px;
+    position: sticky;
+    top: var(--header-height);
+    z-index: 980;
+    backdrop-filter: blur(8px);
+}
+
+.pill-nav-scroll {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    padding: 2px 0;
+}
+
+.pill-nav-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 15px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.pill-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.pill-btn.active {
+    background: var(--emerald);
+    color: #042f20;
+    font-weight: 700;
+    border-color: var(--emerald);
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+}
+
+.pill-btn.active i {
+    color: #042f20;
+}
+
+/* Theme Color Presets & Custom Swatch */
+.theme-color-presets {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+
+.color-swatch-box {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-xs);
+    cursor: pointer;
+    border: 2px solid transparent;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.color-swatch-box:hover {
+    transform: scale(1.18);
+    border-color: #ffffff;
+}
+
+.custom-color-input-wrapper {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 3px 8px;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--border-color);
+}
+
+.custom-color-input-wrapper input[type="color"] {
+    -webkit-appearance: none;
+    border: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 3px;
+    cursor: pointer;
+    background: transparent;
+}
+
+/* Badges for User Management */
+.badge-role-admin { background: rgba(6, 182, 212, 0.18); color: var(--cyan); border: 1px solid rgba(6, 182, 212, 0.3); }
+.badge-role-mandor { background: rgba(245, 158, 11, 0.18); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.3); }
+.badge-role-manager { background: rgba(16, 185, 129, 0.18); color: var(--emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
+.badge-status-active { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+.badge-status-inactive { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+
+/* =========================================================================
+   RESPONSIVE LAYOUT ENGINE (HP, TABLET, DESKTOP)
+   Berdasarkan Referensi media_1790061518969.png & media_1790061422890.png
+   ========================================================================= */
+@media (max-width: 991px) {
+    /* 1. Sidebar desktop disembunyikan sepenuhnya */
+    .sidebar {
+        display: none !important;
+    }
+
+    /* 2. Main content mengambil 100% lebar tanpa offset samping */
+    .main-content, .main-content.expanded {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    /* 3. Tampilkan Horizontal Pill Nav di Atas */
+    .top-pill-nav {
+        display: block !important;
+    }
+
+    /* 4. Penyesuaian Header Atas */
+    .top-header {
+        padding: 0 16px;
+    }
+
+    .hamburger-menu {
+        display: none !important; /* Menu berpindah ke Horizontal Pill Nav */
+    }
+
+    .app-breadcrumb {
+        display: none;
+    }
+
+    .charts-row, .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* 5. Responsive Login Card (Tablet) */
+    .login-split-card {
+        flex-direction: column;
+        max-width: 520px;
+        min-height: auto;
+    }
+
+    .login-visual-side {
+        padding: 30px 24px;
+        min-height: 240px;
+    }
+
+    .login-visual-quote {
+        margin: 16px 0;
+    }
+
+    .quote-title {
+        font-size: 20px;
+    }
+
+    .quote-subtitle {
+        display: none;
+    }
+
+    .login-form-side {
+        padding: 36px 24px;
+    }
+
+    .login-visual-footer {
+        padding-top: 12px;
+    }
 }
 
 @media (max-width: 768px) {
-    .sidebar { transform: translateX(-100%); width: var(--sidebar-width); }
-    .sidebar.expanded { transform: translateX(0); }
-    .main-content, .main-content.expanded { margin-left: 0; }
-    .top-header { padding: 0 14px; }
-    .app-breadcrumb { display: none; }
-    .form-row, .form-row-2, .form-row-3 { grid-template-columns: 1fr; display: flex; flex-direction: column; gap: 0; }
-    .map-controls-panel { width: calc(100% - 28px); top: auto; bottom: 14px; right: 14px; max-height: 45vh; overflow-y: auto; }
+    .pages-container {
+        padding: 14px;
+    }
+
+    .kpi-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .form-row, .form-row-2, .form-row-3 {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .map-wrapper {
+        height: 68vh;
+    }
+
+    /* Map controls di HP melayang rapi di bagian bawah & dapat disembunyikan */
+    .map-controls-panel {
+        width: calc(100% - 24px);
+        top: auto;
+        bottom: 12px;
+        right: 12px;
+        max-height: 52vh;
+        overflow-y: auto;
+    }
+
+    .map-controls-panel.collapsed {
+        transform: translateY(calc(100% + 30px));
+    }
+
+    .btn-float-open-controls {
+        top: 12px;
+        right: 12px;
+    }
+
+    .map-coord-readout {
+        bottom: auto;
+        top: 12px;
+        left: 12px;
+        font-size: 9.5px;
+        padding: 3px 6px;
+    }
+
+    .header-right .btn-xs {
+        display: none;
+    }
+
+    .user-name {
+        max-width: 90px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+/* ==========================================================================
+   FITUR LAPANGAN SURVEYOR & TRACKING GPS REAL-TIME (GIS WEB APPS)
+   ========================================================================== */
+
+/* 1. Floating Surveyor Toolbar di Peta */
+.map-surveyor-toolbar {
+    position: absolute;
+    top: 14px;
+    left: 54px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(14, 21, 38, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--radius-md);
+    padding: 5px 8px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.38);
+}
+
+.btn-survey-tool {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: var(--radius-sm);
+    color: #cbd5e1;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.btn-survey-tool:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--emerald);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.btn-survey-tool.active {
+    background: rgba(16, 185, 129, 0.18);
+    border-color: var(--emerald);
+    color: var(--emerald-light);
+    font-weight: 700;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+/* 2. HUD Banner Status Tracking GPS Berjalan */
+.tracking-live-hud {
+    position: absolute;
+    top: 64px;
+    left: 54px;
+    z-index: 1001;
+    min-width: 280px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1.5px solid #06b6d4;
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+}
+
+.hud-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 6px;
+}
+
+.hud-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #38bdf8;
+    letter-spacing: 0.5px;
+}
+
+.pulsing-dot .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ef4444;
+    animation: pulseGpsDot 1.4s infinite ease-in-out;
+}
+
+@keyframes pulseGpsDot {
+    0% {
+        transform: scale(0.9);
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    70% {
+        transform: scale(1.15);
+        opacity: 0.8;
+        box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+    }
+    100% {
+        transform: scale(0.9);
+        opacity: 1;
+    }
+}
+
+.hud-timer {
+    font-family: monospace;
+    font-size: 13px;
+    font-weight: 800;
+    color: #f59e0b;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+
+.hud-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.hud-stat-item {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    padding: 6px 4px;
+    text-align: center;
+}
+
+.hud-val {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #38bdf8;
+}
+
+.hud-lbl {
+    display: block;
+    font-size: 8.5px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+.hud-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+/* 3. Radar Marker GPS Bergerak di Peta */
+.gps-live-radar-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gps-live-radar-icon .radar-pulse {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(6, 182, 212, 0.45);
+    animation: radarExpand 1.8s infinite ease-out;
+}
+
+.gps-live-radar-icon .radar-dot {
+    position: relative;
+    z-index: 2;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #0284c7;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+}
+
+@keyframes radarExpand {
+    0% {
+        transform: scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}
+
+/* 4. Multi-Photo Preview Grid & Badges (Formulir Laporan) */
+.photo-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 8px;
+    width: 100%;
+}
+
+.photo-preview-item {
+    position: relative;
+    border-radius: var(--radius-xs);
+    overflow: hidden;
+    height: 84px;
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    background: #0b111e;
+}
+
+.photo-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+}
+
+.photo-preview-item img:hover {
+    transform: scale(1.05);
+}
+
+.btn-remove-photo {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.9);
+    color: #ffffff;
+    border: none;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 3;
+    transition: background var(--transition-fast);
+}
+
+.btn-remove-photo:hover {
+    background: #dc2626;
+}
+
+.photo-index-tag {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    background: rgba(0, 0, 0, 0.72);
+    color: #34d399;
+    padding: 1px 5px;
+    border-radius: 3px;
+    z-index: 2;
+}
+
+/* 5. Modal Galeri Multi-Foto Dokumentasi */
+.gallery-main-view {
+    width: 100%;
+    height: 360px;
+    background: #090e18;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gallery-main-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.gallery-thumbs-row {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 8px 2px;
+    scrollbar-width: thin;
+}
+
+.gallery-thumb-item {
+    position: relative;
+    flex: 0 0 76px;
+    height: 60px;
+    border-radius: var(--radius-xs);
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background: #000;
+}
+
+.gallery-thumb-item:hover {
+    border-color: rgba(16, 185, 129, 0.6);
+    transform: translateY(-2px);
+}
+
+.gallery-thumb-item.active {
+    border-color: var(--emerald);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.gallery-thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gallery-thumb-item .thumb-badge {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background: rgba(0, 0, 0, 0.75);
+    font-size: 8px;
+    font-weight: 700;
+    color: #ffffff;
+    padding: 1px 3px;
+    border-radius: 2px;
+}
+
+/* 6. Penyesuaian Responsif Toolbar & HUD pada Layar Mobile/HP */
+@media (max-width: 768px) {
+    .map-surveyor-toolbar {
+        top: 12px;
+        left: 52px;
+        max-width: calc(100% - 110px);
+        overflow-x: auto;
+        padding: 4px 6px;
+    }
+
+    .btn-survey-tool {
+        padding: 5px 8px;
+        font-size: 10.5px;
+    }
+
+    .btn-survey-tool span {
+        display: none; /* Icon saja di HP agar tidak memakan ruang pandang peta */
+    }
+
+    .tracking-live-hud {
+        top: auto;
+        bottom: 80px;
+        left: 12px;
+        right: 12px;
+        min-width: auto;
+    }
 }

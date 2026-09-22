@@ -1,14 +1,14 @@
 /**
  * =========================================================================
  * CORE LOGIC & APLIKASI WEB-GIS ENTERPRISE - PT. ENERGI MAJU JAYA
- * app.js - Termasuk CRUD Database Blok, Aturan Tanam, Edit/Hapus Rekap
+ * app.js - Branding Customizer, Theme Switcher, Responsive Nav, & Core Logic
  * =========================================================================
  */
 
 const GAS_URL = 'YOUR_GAS_WEB_APP_URL_HERE';
 const IS_DEMO = GAS_URL === 'YOUR_GAS_WEB_APP_URL_HERE';
 
-// ===== DATA MASTER BLOK PT. EMJ (DISIMPAN DI MEMORY / LOCALSTORAGE) =====
+// DATA MASTER BLOK PT. EMJ (DISIMPAN DI MEMORY / LOCALSTORAGE)
 let DEFAULT_BLOCKS = [
     {
         id_blok: 'OPD A',
@@ -96,7 +96,7 @@ let DEFAULT_BLOCKS = [
     }
 ];
 
-// DATA LAPORAN OTENTIK DARI EXCEL PT. EMJ (SEPTEMBER & AGUSTUS 2026)
+// DATA LAPORAN OTENTIK DARI EXCEL PT. EMJ
 let DEFAULT_REPORTS = [
     {
         id_laporan: 'LPR-20260902-001',
@@ -167,108 +167,6 @@ let DEFAULT_REPORTS = [
         foto_url: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=600&q=80'
     },
     {
-        id_laporan: 'LPR-20260901-001',
-        tanggal: '2026-09-01',
-        jml_tenaga_kerja: 3,
-        nama_tenaga_kerja: '1. Baco  2. Angga  3. Harianto',
-        kegiatan: 'Pembuatan lubang tanam',
-        id_blok: 'OPD A',
-        luas_ha: 6.68,
-        uom: 'Ha',
-        realisasi_jml: 0.30,
-        todate: 0.74,
-        sisa_ha: 5.94,
-        keterangan: 'Tanah mineral gembur',
-        lat_gps: -1.103980,
-        lng_gps: 102.152890,
-        foto_url: ''
-    },
-    {
-        id_laporan: 'LPR-20260901-002',
-        tanggal: '2026-09-01',
-        jml_tenaga_kerja: 1,
-        nama_tenaga_kerja: '1. Dedy',
-        kegiatan: 'Langsir bibit dari terminal ke titik tanam',
-        id_blok: 'OPD A',
-        luas_ha: 6.68,
-        uom: 'Ha',
-        realisasi_jml: 0.17,
-        todate: 0.74,
-        sisa_ha: 5.94,
-        keterangan: 'Bibit Marihat umur 12 bulan',
-        lat_gps: -1.104110,
-        lng_gps: 102.153100,
-        foto_url: ''
-    },
-    {
-        id_laporan: 'LPR-20260901-003',
-        tanggal: '2026-09-01',
-        jml_tenaga_kerja: 2,
-        nama_tenaga_kerja: '1. Sunardi  2. Fajri',
-        kegiatan: 'Tanam',
-        id_blok: 'OPD A',
-        luas_ha: 6.68,
-        uom: 'Ha',
-        realisasi_jml: 0.30,
-        todate: 0.74,
-        sisa_ha: 5.94,
-        keterangan: 'Kondisi bibit prima tanpa afkir',
-        lat_gps: -1.104300,
-        lng_gps: 102.153300,
-        foto_url: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=600&q=80'
-    },
-    {
-        id_laporan: 'LPR-20260831-001',
-        tanggal: '2026-08-31',
-        jml_tenaga_kerja: 3,
-        nama_tenaga_kerja: '1. Dedy  2. Fajri  3. Harianto',
-        kegiatan: 'Pembuatan lubang tanam',
-        id_blok: 'OPD A',
-        luas_ha: 6.68,
-        uom: 'Ha',
-        realisasi_jml: 0.44,
-        todate: 0.44,
-        sisa_ha: 6.24,
-        keterangan: 'Mulai pembukaan lubang di Blok OPD A',
-        lat_gps: -1.103500,
-        lng_gps: 102.152400,
-        foto_url: ''
-    },
-    {
-        id_laporan: 'LPR-20260831-002',
-        tanggal: '2026-08-31',
-        jml_tenaga_kerja: 2,
-        nama_tenaga_kerja: '1. Baco  2. Sunardi',
-        kegiatan: 'Tanam',
-        id_blok: 'OPD A',
-        luas_ha: 6.68,
-        uom: 'Ha',
-        realisasi_jml: 0.44,
-        todate: 0.44,
-        sisa_ha: 6.24,
-        keterangan: 'Tanam perdana Blok OPD A',
-        lat_gps: -1.103600,
-        lng_gps: 102.152600,
-        foto_url: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=600&q=80'
-    },
-    {
-        id_laporan: 'LPR-20260829-001',
-        tanggal: '2026-08-29',
-        jml_tenaga_kerja: 3,
-        nama_tenaga_kerja: '1. Baco  2. Sunardi  3. Angga',
-        kegiatan: 'Bongkar muat bibit dari truk ke terminal bibit',
-        id_blok: 'OPD A',
-        luas_ha: 6.68,
-        uom: 'Pkk',
-        realisasi_jml: 300,
-        todate: 404,
-        sisa_ha: '-',
-        keterangan: 'Pengiriman ketiga bibit dari KBM = 300 bibit / 2.2 Ha',
-        lat_gps: -1.102800,
-        lng_gps: 102.151800,
-        foto_url: ''
-    },
-    {
         id_laporan: 'LPR-20260828-001',
         tanggal: '2026-08-28',
         jml_tenaga_kerja: 2,
@@ -287,7 +185,6 @@ let DEFAULT_REPORTS = [
     }
 ];
 
-// State Global
 let appData = {
     blocks: [],
     reports: []
@@ -296,7 +193,7 @@ let appData = {
 let currentUser = {
     id: 'USR-001',
     name: 'Ir. Bambang Wijaya',
-    email: 'bambang.w@pt-emj.co.id',
+    email: 'admin@pt-emj.co.id',
     role: 'admin',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80'
 };
@@ -306,23 +203,26 @@ let chartBlokInstance = null;
 
 // ===== INISIALISASI UTAMA =====
 document.addEventListener('DOMContentLoaded', async () => {
-    initSession();
-    initCompanySettingsUI();
-    initNavigation();
-    applyRolePermissions();
+    // 1. Cek Status Login (Split-Screen Login vs Dashboard)
+    if (typeof checkAuthStatus === 'function') {
+        checkAuthStatus();
+    }
 
-    // Muat data dari localStorage atau default
+    // 2. Terapkan Tema Warna & Branding
+    loadAppThemeAndBranding();
+
+    // 3. Muat Data Master Blok & Rekap
     loadPersistedData();
 
-    // Render Dashboard, Rekap, dan Master Blok
+    // 4. Inisialisasi Navigasi Dinamis Responsif (Sidebar & Top Horizontal Pills)
+    initDynamicNavigation();
+
+    // 5. Render Komponen Tampilan
     renderDashboard(appData.blocks, appData.reports);
     renderRekapTable(appData.reports);
     renderMasterBlokTable();
 
-    // Inisialisasi Form Input
     if (typeof initForm === 'function') initForm();
-
-    console.log(`🌴 Sistem Penanaman Sawit PT. EMJ Aktif. User: ${currentUser.name} (${currentUser.role.toUpperCase()})`);
 });
 
 function loadPersistedData() {
@@ -344,7 +244,6 @@ function loadPersistedData() {
 }
 
 function syncBlokMetadata() {
-    // Sinkronisasi BLOK_METADATA di form.js
     if (typeof BLOK_METADATA !== 'undefined') {
         appData.blocks.forEach(b => {
             BLOK_METADATA[b.id_blok] = {
@@ -356,7 +255,6 @@ function syncBlokMetadata() {
         });
     }
 
-    // Perbarui opsi dropdown di form
     const select = document.getElementById('selectBlok');
     if (select) {
         const curVal = select.value;
@@ -371,13 +269,154 @@ function syncBlokMetadata() {
     }
 }
 
-// ===== 1. CRUD DATABASE MASTER BLOK KEBUN =====
+/**
+ * =========================================================================
+ * 3. KUSTOMISASI BRANDING: LOGO, NAMA APLIKASI, & WARNA TEMA DINAMIS
+ * =========================================================================
+ */
+function loadAppThemeAndBranding() {
+    // 1. Warna Tema
+    const savedColor = localStorage.getItem('sawit_theme_color');
+    if (savedColor) applyThemeColor(savedColor, false);
+
+    // 2. Nama Aplikasi
+    const savedAppName = localStorage.getItem('sawit_app_name');
+    if (savedAppName) {
+        document.querySelectorAll('.app-title').forEach(el => el.textContent = savedAppName);
+        const inp = document.getElementById('setAppCustomName');
+        if (inp) inp.value = savedAppName;
+    }
+
+    // 3. Logo Aplikasi
+    const savedLogo = localStorage.getItem('sawit_app_logo');
+    if (savedLogo) {
+        document.querySelectorAll('.brand-badge').forEach(el => {
+            el.innerHTML = `<img src="${savedLogo}" style="width: 24px; height: 24px; object-fit: contain;">`;
+        });
+    }
+}
+
+function applyThemeColor(hexColor, showNotification = true) {
+    document.documentElement.style.setProperty('--emerald', hexColor);
+
+    // Hitung variasi warna gelap dan transparan
+    const r = parseInt(hexColor.slice(1, 3), 16) || 16;
+    const g = parseInt(hexColor.slice(3, 5), 16) || 185;
+    const b = parseInt(hexColor.slice(5, 7), 16) || 129;
+
+    const darker = `rgb(${Math.max(0, r - 30)}, ${Math.max(0, g - 30)}, ${Math.max(0, b - 30)})`;
+    const subtle = `rgba(${r}, ${g}, ${b}, 0.15)`;
+
+    document.documentElement.style.setProperty('--emerald-dark', darker);
+    document.documentElement.style.setProperty('--emerald-subtle', subtle);
+
+    localStorage.setItem('sawit_theme_color', hexColor);
+
+    const picker = document.getElementById('customColorPicker');
+    if (picker) picker.value = hexColor;
+
+    if (showNotification && typeof showToast === 'function') {
+        showToast(`Tema warna aplikasi diperbarui (${hexColor})`, 'success');
+    }
+}
+
+function saveAppBrandingFromUI() {
+    const newName = document.getElementById('setAppCustomName')?.value.trim();
+    if (newName) {
+        localStorage.setItem('sawit_app_name', newName);
+        document.querySelectorAll('.app-title').forEach(el => el.textContent = newName);
+    }
+
+    const fileInput = document.getElementById('uploadAppLogoFile');
+    if (fileInput && fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            localStorage.setItem('sawit_app_logo', e.target.result);
+            document.querySelectorAll('.brand-badge').forEach(el => {
+                el.innerHTML = `<img src="${e.target.result}" style="width: 24px; height: 24px; object-fit: contain;">`;
+            });
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+
+    showToast('Identitas dan logo aplikasi berhasil diperbarui!', 'success');
+}
+
+/**
+ * =========================================================================
+ * 5. NAVIGASI DINAMIS RESPONSIF (HP / TABLET / LAPTOP / DESKTOP)
+ * Di HP / Tablet sidebar samping berpindah ke ATAS berbentuk Horizontal Pill Nav
+ * =========================================================================
+ */
+function initDynamicNavigation() {
+    // Tombol di sidebar samping desktop
+    const sidebarItems = document.querySelectorAll('.sidebar-menu .menu-item');
+    // Tombol di bar lonjong atas (Horizontal Pill Nav) untuk Mobile/Tablet
+    const topPillItems = document.querySelectorAll('.top-pill-nav .pill-btn');
+
+    const pages = document.querySelectorAll('.page');
+    const hamburger = document.getElementById('hamburgerMenu');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    function switchPage(targetId) {
+        // Sync active class on sidebar items
+        sidebarItems.forEach(m => {
+            m.classList.toggle('active', m.getAttribute('data-target') === targetId);
+        });
+
+        // Sync active class on top pills
+        topPillItems.forEach(p => {
+            p.classList.toggle('active', p.getAttribute('data-target') === targetId);
+        });
+
+        // Switch visible page
+        pages.forEach(p => p.classList.toggle('active', p.id === targetId));
+
+        // Hook inisialisasi per modul
+        if (targetId === 'page-map' && typeof initMap === 'function') {
+            setTimeout(initMap, 100);
+        } else if (targetId === 'page-form' && typeof initForm === 'function') {
+            setTimeout(initForm, 100);
+        } else if (targetId === 'page-upload' && typeof initUploadZone === 'function') {
+            setTimeout(initUploadZone, 100);
+        } else if (targetId === 'page-settings') {
+            loadCompanySettingsToForm();
+            renderMasterBlokTable();
+            if (typeof renderUserManagementTable === 'function') renderUserManagementTable();
+        }
+
+        // Close sidebar if open on mobile
+        if (window.innerWidth <= 768 && sidebar) {
+            sidebar.classList.remove('expanded');
+        }
+    }
+
+    sidebarItems.forEach(item => {
+        item.addEventListener('click', () => switchPage(item.getAttribute('data-target')));
+    });
+
+    topPillItems.forEach(pill => {
+        pill.addEventListener('click', () => switchPage(pill.getAttribute('data-target')));
+    });
+
+    if (hamburger && sidebar) {
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('expanded');
+            sidebar.classList.toggle('collapsed');
+            if (mainContent) mainContent.classList.toggle('expanded');
+            setTimeout(() => { if (typeof map !== 'undefined' && map) map.invalidateSize(); }, 300);
+        });
+    }
+}
+
+// ===== MASTER BLOK CRUD & REKAP ACTION (Sama dengan Turn Sebelumnya) =====
 function renderMasterBlokTable() {
     const tbody = document.getElementById('masterBlokTableBody');
     if (!tbody) return;
 
     tbody.innerHTML = '';
-    appData.blocks.forEach((b, idx) => {
+    appData.blocks.forEach((b) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td style="font-weight: 700; color: #fff;">${b.id_blok}</td>
@@ -401,11 +440,22 @@ function renderMasterBlokTable() {
     });
 }
 
+let tempUploadedBlokGeometry = null;
+
 function openAddBlokModal() {
     let modal = document.getElementById('blokModal');
     if (!modal) {
         createBlokModal();
         modal = document.getElementById('blokModal');
+    }
+
+    tempUploadedBlokGeometry = null;
+    const shpInput = document.getElementById('inpBlokShpFile');
+    if (shpInput) shpInput.value = '';
+    const statusText = document.getElementById('blokShpStatusText');
+    if (statusText) {
+        statusText.textContent = 'Unggah file .zip (SHP+SHX+DBF). Sistem otomatis menghitung luas Hektar & target pokok secara akurat.';
+        statusText.className = 'text-xs text-muted m-0 mt-1';
     }
 
     document.getElementById('blokModalTitle').textContent = 'Tambah Blok Kebun Baru';
@@ -416,8 +466,6 @@ function openAddBlokModal() {
     document.getElementById('inpBlokLuas').value = '';
     document.getElementById('inpBlokVarietas').value = 'Dami Mas';
     document.getElementById('inpBlokTahun').value = '2026';
-    
-    // Default jarak & pola tanam
     document.getElementById('inpBlokPola').value = 'Mata Lima';
     document.getElementById('inpBlokJarak').value = '9x9';
     recalculateSphInModal();
@@ -431,6 +479,10 @@ function openEditBlokModal(idBlok) {
         createBlokModal();
         modal = document.getElementById('blokModal');
     }
+
+    tempUploadedBlokGeometry = null;
+    const shpInput = document.getElementById('inpBlokShpFile');
+    if (shpInput) shpInput.value = '';
 
     const blok = appData.blocks.find(b => b.id_blok === idBlok);
     if (!blok) return;
@@ -469,6 +521,21 @@ function createBlokModal() {
             <form id="formMasterBlok" onsubmit="saveBlok(event)">
                 <input type="hidden" id="editBlokOriginalId">
                 <div class="modal-body-clean">
+
+                    <!-- Fitur Upload Shapefile Terintegrasi Langsung di Master Blok -->
+                    <div class="form-group-clean mb-3 p-2 bg-subtle rounded border-subtle">
+                        <div class="flex-between mb-1">
+                            <label class="form-label-xs text-emerald font-semibold m-0">
+                                <i class="fas fa-file-zipper mr-1"></i> Upload Shapefile Blok Kebun (.zip / GeoJSON)
+                            </label>
+                            <span class="badge badge-emerald-role">Auto-Detect Luas & SPH</span>
+                        </div>
+                        <input type="file" id="inpBlokShpFile" class="form-control-clean" accept=".zip,.geojson,.json" onchange="handleBlokShpUpload(event)">
+                        <p class="text-xs text-muted m-0 mt-1" id="blokShpStatusText">
+                            Unggah file .zip (SHP+SHX+DBF). Sistem otomatis menghitung luas Hektar & target pokok secara akurat.
+                        </p>
+                    </div>
+
                     <div class="form-row-2">
                         <div class="form-group-clean mb-2">
                             <label class="form-label-xs">Kode Blok (e.g. OPD E) <span class="text-danger">*</span></label>
@@ -491,7 +558,6 @@ function createBlokModal() {
                         </div>
                     </div>
 
-                    <!-- Aturan Tanam & SPH -->
                     <div class="p-2 bg-subtle rounded border-subtle mb-3">
                         <span class="form-label-xs font-semibold text-white mb-2 block">Aturan & Pola Tanam:</span>
                         <div class="form-row-2">
@@ -516,11 +582,11 @@ function createBlokModal() {
                         <div class="form-row-2 mt-2">
                             <div class="form-group-clean">
                                 <label class="text-xs text-muted">Target SPH</label>
-                                <input type="number" id="inpBlokSph" class="form-control-clean bg-slate-subtle" readonly>
+                                <input type="number" id="inpBlokSph" class="form-control-clean bg-slate-subtle font-bold" readonly>
                             </div>
                             <div class="form-group-clean">
                                 <label class="text-xs text-muted">Estimasi Target Pokok</label>
-                                <input type="number" id="inpBlokTarget" class="form-control-clean bg-slate-subtle font-bold" readonly>
+                                <input type="number" id="inpBlokTarget" class="form-control-clean bg-slate-subtle font-bold text-emerald" readonly>
                             </div>
                         </div>
                     </div>
@@ -544,7 +610,132 @@ function createBlokModal() {
     document.body.insertAdjacentHTML('beforeend', html);
 }
 
-// 2. ATURAN TANAM: RUMUS SPH OTOMATIS
+/**
+ * Handle Ekstraksi Shapefile di Modal Blok & Kalkulasi Luas Otomatis
+ */
+async function handleBlokShpUpload(e) {
+    const file = e.target.files[0];
+    const statusEl = document.getElementById('blokShpStatusText');
+    if (!file) return;
+
+    if (statusEl) {
+        statusEl.innerHTML = '<i class="fas fa-spinner fa-spin text-emerald mr-1"></i> Membaca data spasial Shapefile & menghitung luas area...';
+        statusEl.className = 'text-xs text-emerald mt-1';
+    }
+
+    try {
+        let geojson = null;
+        const fname = file.name.toLowerCase();
+
+        if (fname.endsWith('.zip')) {
+            if (typeof shp === 'undefined') throw new Error('Pustaka shpjs belum siap.');
+            const buffer = await file.arrayBuffer();
+            geojson = await shp(buffer);
+        } else if (fname.endsWith('.geojson') || fname.endsWith('.json')) {
+            const text = await file.text();
+            geojson = JSON.parse(text);
+        } else {
+            throw new Error('Format berkas harus berupa .zip (Shapefile) atau .geojson');
+        }
+
+        let features = geojson.type === 'FeatureCollection' ? geojson.features : (Array.isArray(geojson) ? geojson[0].features : [geojson]);
+        let polyFeature = features.find(f => f.geometry && (f.geometry.type === 'Polygon' || f.geometry.type === 'MultiPolygon'));
+
+        if (!polyFeature) {
+            throw new Error('Geometri poligon batas blok tidak ditemukan di dalam berkas.');
+        }
+
+        let coords = polyFeature.geometry.coordinates;
+        let isPlanar = false;
+
+        const samplePt = polyFeature.geometry.type === 'Polygon' ? coords[0][0] : coords[0][0][0];
+        if (Math.abs(samplePt[0]) > 10000 || Math.abs(samplePt[1]) > 10000) {
+            isPlanar = true;
+        }
+
+        let luasHa = 0;
+        if (isPlanar) {
+            let ring = polyFeature.geometry.type === 'Polygon' ? coords[0] : coords[0][0];
+            let areaM2 = calculateShoelaceArea(ring);
+            luasHa = areaM2 / 10000;
+            polyFeature = reprojectFeatureToWGS84(polyFeature, 'EPSG:32750');
+        } else {
+            let ringWgs = polyFeature.geometry.type === 'Polygon' ? coords[0] : coords[0][0];
+            let ringUtm = ringWgs.map(pt => {
+                try {
+                    return (typeof proj4 !== 'undefined') ? proj4('WGS84', 'EPSG:32750', [pt[0], pt[1]]) : pt;
+                } catch(err) {
+                    return pt;
+                }
+            });
+            let areaM2 = calculateShoelaceArea(ringUtm);
+            luasHa = areaM2 / 10000;
+        }
+
+        if (luasHa <= 0) luasHa = 1.0;
+
+        const inpLuas = document.getElementById('inpBlokLuas');
+        if (inpLuas) inpLuas.value = luasHa.toFixed(2);
+
+        const props = polyFeature.properties || {};
+        const blockNameCandidate = props.BLOK || props.KODE_BLOK || props.KODE || props.NAME || props.Id || props.ID_BLOK;
+        const inpId = document.getElementById('inpBlokId');
+        if (inpId && blockNameCandidate && !inpId.readOnly) {
+            inpId.value = String(blockNameCandidate).toUpperCase();
+        }
+
+        recalculateSphInModal();
+
+        tempUploadedBlokGeometry = polyFeature.geometry;
+
+        if (statusEl) {
+            statusEl.innerHTML = `<i class="fas fa-circle-check text-emerald mr-1"></i> Shapefile sukses dibaca! Luas terdeteksi: <b>${luasHa.toFixed(2)} Ha</b> (${isPlanar ? 'UTM 50S' : 'WGS84'}).`;
+            statusEl.className = 'text-xs text-emerald mt-1';
+        }
+        if (typeof showToast === 'function') {
+            showToast(`Shapefile berhasil dimuat! Luas: ${luasHa.toFixed(2)} Ha`, 'success');
+        }
+    } catch (err) {
+        console.error('SHP Upload Error:', err);
+        if (statusEl) {
+            statusEl.innerHTML = `<i class="fas fa-triangle-exclamation text-danger mr-1"></i> ${err.message || 'Gagal memproses Shapefile'}`;
+            statusEl.className = 'text-xs text-danger mt-1';
+        }
+        if (typeof showToast === 'function') showToast(err.message || 'Gagal membaca Shapefile', 'error');
+    }
+}
+
+function calculateShoelaceArea(ring) {
+    let area = 0;
+    const n = ring.length;
+    for (let i = 0; i < n - 1; i++) {
+        area += ring[i][0] * ring[i + 1][1] - ring[i + 1][0] * ring[i][1];
+    }
+    area += ring[n - 1][0] * ring[0][1] - ring[0][0] * ring[n - 1][1];
+    return Math.abs(area) / 2;
+}
+
+function reprojectFeatureToWGS84(feature, sourceCrs = 'EPSG:32750') {
+    const clone = JSON.parse(JSON.stringify(feature));
+    const reprojectCoord = (coord) => {
+        if (typeof proj4 !== 'undefined') {
+            try {
+                return proj4(sourceCrs, 'WGS84', [coord[0], coord[1]]);
+            } catch(e) {
+                return coord;
+            }
+        }
+        return coord;
+    };
+
+    if (clone.geometry.type === 'Polygon') {
+        clone.geometry.coordinates = clone.geometry.coordinates.map(ring => ring.map(reprojectCoord));
+    } else if (clone.geometry.type === 'MultiPolygon') {
+        clone.geometry.coordinates = clone.geometry.coordinates.map(poly => poly.map(ring => ring.map(reprojectCoord)));
+    }
+    return clone;
+}
+
 function recalculateSphInModal() {
     const pola = document.getElementById('inpBlokPola')?.value || 'Mata Lima';
     const jarakStr = document.getElementById('inpBlokJarak')?.value || '9x9';
@@ -552,7 +743,7 @@ function recalculateSphInModal() {
 
     let sph = 138;
     if (jarakStr === '9x9') {
-        sph = (pola === 'Mata Lima') ? 138 : 123; // 138 dengan koreksi konservasi/parit
+        sph = (pola === 'Mata Lima') ? 138 : 123;
     } else if (jarakStr === '9x8') {
         sph = 138;
     } else if (jarakStr === '9.2x7.9') {
@@ -586,7 +777,6 @@ function saveBlok(e) {
     }
 
     if (origId) {
-        // Mode Edit
         const idx = appData.blocks.findIndex(b => b.id_blok === origId);
         if (idx !== -1) {
             appData.blocks[idx] = {
@@ -598,11 +788,11 @@ function saveBlok(e) {
                 target_sph: sph,
                 target_pokok: target,
                 varietas_bibit: varietas,
-                tahun_tanam: tahun
+                tahun_tanam: tahun,
+                geometry: tempUploadedBlokGeometry || appData.blocks[idx].geometry || null
             };
         }
     } else {
-        // Mode Tambah
         if (appData.blocks.some(b => b.id_blok === idBlok)) {
             showToast(`Blok dengan kode ${idBlok} sudah terdaftar!`, 'error');
             return;
@@ -626,14 +816,18 @@ function saveBlok(e) {
             persentase: 0,
             status: 'Belum Mulai',
             varietas_bibit: varietas,
-            tahun_tanam: tahun
+            tahun_tanam: tahun,
+            geometry: tempUploadedBlokGeometry || null
         });
     }
 
+    tempUploadedBlokGeometry = null;
     localStorage.setItem('sawit_master_blocks', JSON.stringify(appData.blocks));
     syncBlokMetadata();
     renderMasterBlokTable();
     renderDashboard(appData.blocks, appData.reports);
+
+    if (typeof loadBlockLayers === 'function') loadBlockLayers();
 
     document.getElementById('blokModal').classList.remove('show');
     showToast(`Blok ${idBlok} berhasil disimpan!`, 'success');
@@ -642,29 +836,28 @@ function saveBlok(e) {
 function deleteBlok(idBlok) {
     if (!confirm(`Apakah Anda yakin ingin menghapus Blok ${idBlok} dari database?`)) return;
 
-    // Cek apakah ada laporan terkait
-    const hasReports = appData.reports.some(r => r.id_blok === idBlok);
-    if (hasReports) {
-        if (!confirm(`Peringatan: Terdapat laporan kegiatan pada Blok ${idBlok}. Tetap lanjutkan penghapusan?`)) return;
-    }
-
     appData.blocks = appData.blocks.filter(b => b.id_blok !== idBlok);
     localStorage.setItem('sawit_master_blocks', JSON.stringify(appData.blocks));
     syncBlokMetadata();
     renderMasterBlokTable();
     renderDashboard(appData.blocks, appData.reports);
+    if (typeof loadBlockLayers === 'function') loadBlockLayers();
 
     showToast(`Blok ${idBlok} berhasil dihapus.`, 'success');
 }
 
-// ===== 3. EDIT & HAPUS PADA REKAPITULASI LAPORAN =====
+// ===== EDIT & HAPUS REKAPITULASI (MULTI-FOTO SUPPORT) =====
 function renderRekapTable(reports) {
     const tbody = document.querySelector('#page-rekap .data-table tbody');
     if (!tbody) return;
 
     tbody.innerHTML = '';
     reports.forEach((r, idx) => {
-        const hasPhoto = !!(r.foto_url || r.foto);
+        const photos = Array.isArray(r.foto_kegiatan) && r.foto_kegiatan.length > 0 
+            ? r.foto_kegiatan 
+            : (r.foto_url || r.foto ? [r.foto_url || r.foto] : []);
+        const photoCount = photos.length;
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td style="text-align: center;">${idx + 1}</td>
@@ -675,13 +868,15 @@ function renderRekapTable(reports) {
             <td style="text-align: center; font-weight: bold;">${r.id_blok}</td>
             <td style="text-align: right;">${r.luas_ha || 6.66}</td>
             <td style="text-align: center;">${r.uom || 'Ha'}</td>
-            <td style="text-align: right; font-weight: bold; color: #10b981;">${Number(r.realisasi_jml).toLocaleString('id-ID')}</td>
+            <td style="text-align: right; font-weight: bold; color: var(--emerald);">${Number(r.realisasi_jml).toLocaleString('id-ID')}</td>
             <td style="text-align: right;">${Number(r.todate || r.realisasi_jml).toLocaleString('id-ID')}</td>
             <td style="text-align: right;">${r.sisa_ha !== undefined ? r.sisa_ha : '-'}</td>
             <td style="font-size: 8pt; color: #94a3b8;">${r.keterangan || r.catatan || '-'}</td>
             <td style="text-align: center;">
-                ${hasPhoto 
-                    ? `<button class="btn btn-xs btn-icon btn-secondary" onclick="viewPhotoModal('${r.foto_url || r.foto}')"><i class="fas fa-image text-emerald"></i></button>`
+                ${photoCount > 0 
+                    ? `<button type="button" class="btn btn-xs btn-outline-clean" onclick="openPhotoGalleryModal('${r.id_laporan}')" title="Buka ${photoCount} Foto Dokumentasi">
+                         <i class="fas fa-camera text-emerald mr-1"></i> ${photoCount} Foto
+                       </button>`
                     : `<span class="text-xs text-muted">-</span>`
                 }
             </td>
@@ -699,6 +894,54 @@ function renderRekapTable(reports) {
 
     const countEl = document.getElementById('rekapRecordCount');
     if (countEl) countEl.textContent = `Menampilkan ${reports.length} catatan kegiatan`;
+}
+
+function openPhotoGalleryModal(idLaporan) {
+    const rep = appData.reports.find(r => r.id_laporan === idLaporan);
+    if (!rep) return;
+
+    const photos = Array.isArray(rep.foto_kegiatan) && rep.foto_kegiatan.length > 0 
+        ? rep.foto_kegiatan 
+        : (rep.foto_url || rep.foto ? [rep.foto_url || rep.foto] : []);
+
+    if (photos.length === 0) {
+        if (typeof showToast === 'function') showToast('Tidak ada foto dokumentasi pada laporan ini.', 'warning');
+        return;
+    }
+
+    const modal = document.getElementById('photoGalleryModal');
+    if (!modal) return;
+
+    document.getElementById('galleryModalTitle').textContent = `Dokumentasi: ${rep.kegiatan} (${rep.id_blok})`;
+    document.getElementById('galleryModalSubtitle').textContent = `Tanggal: ${formatDateIndo(rep.tanggal || rep.tanggal_tanam)} | Total: ${photos.length} Foto Lapangan`;
+
+    const mainImg = document.getElementById('galleryMainImg');
+    if (mainImg) mainImg.src = photos[0];
+
+    const thumbsRow = document.getElementById('galleryThumbsRow');
+    if (thumbsRow) {
+        thumbsRow.innerHTML = photos.map((src, idx) => `
+            <div class="gallery-thumb-item ${idx === 0 ? 'active' : ''}" onclick="selectGalleryPhoto('${src}', this)">
+                <img src="${src}" alt="Foto ${idx + 1}">
+                <span class="thumb-badge">#${idx + 1}</span>
+            </div>
+        `).join('');
+    }
+
+    modal.classList.add('show');
+}
+
+function selectGalleryPhoto(src, el) {
+    const mainImg = document.getElementById('galleryMainImg');
+    if (mainImg) mainImg.src = src;
+
+    document.querySelectorAll('.gallery-thumb-item').forEach(item => item.classList.remove('active'));
+    if (el) el.classList.add('active');
+}
+
+function closePhotoGalleryModal() {
+    const modal = document.getElementById('photoGalleryModal');
+    if (modal) modal.classList.remove('show');
 }
 
 function openEditReportModal(idLaporan) {
@@ -867,182 +1110,6 @@ function deleteReport(idLaporan) {
     showToast('Catatan kegiatan berhasil dihapus.', 'success');
 }
 
-// ===== PENGATURAN IDENTITAS PERUSAHAAN & SESSION =====
-function initSession() {
-    const savedUser = localStorage.getItem('sawit_current_user');
-    if (savedUser) {
-        try { currentUser = JSON.parse(savedUser); } catch (e) {}
-    }
-    updateUserDisplay();
-}
-
-function updateUserDisplay() {
-    const avatarEl = document.getElementById('topUserAvatar');
-    const nameEl = document.getElementById('topUserName');
-    const roleBadge = document.getElementById('topUserRoleBadge');
-
-    if (avatarEl) avatarEl.src = currentUser.avatar;
-    if (nameEl) nameEl.textContent = currentUser.name;
-    if (roleBadge) {
-        roleBadge.textContent = currentUser.role.toUpperCase();
-        roleBadge.className = `badge ${currentUser.role === 'admin' ? 'badge-primary-role' : currentUser.role === 'manager' ? 'badge-emerald-role' : 'badge-amber-role'}`;
-    }
-}
-
-function applyRolePermissions() {
-    const role = currentUser.role;
-    const menuUpload = document.querySelector('[data-target="page-upload"]');
-    const menuSettings = document.querySelector('[data-target="page-settings"]');
-
-    if (menuSettings) menuSettings.style.display = (role === 'admin') ? 'flex' : 'none';
-    if (menuUpload) menuUpload.style.display = (role === 'admin' || role === 'manager') ? 'flex' : 'none';
-
-    const adminBadges = document.querySelectorAll('.admin-only');
-    adminBadges.forEach(el => { el.style.display = (role === 'admin') ? 'block' : 'none'; });
-
-    updateUserDisplay();
-}
-
-function switchUserRole(newRole) {
-    if (newRole === 'admin') {
-        currentUser = {
-            id: 'USR-001',
-            name: 'Ir. Bambang Wijaya (Admin)',
-            email: 'admin@pt-emj.co.id',
-            role: 'admin',
-            avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80'
-        };
-    } else if (newRole === 'mandor') {
-        currentUser = {
-            id: 'USR-002',
-            name: 'Joko Susanto (Mandor Tanam)',
-            email: 'mandor.joko@pt-emj.co.id',
-            role: 'mandor',
-            avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80'
-        };
-    } else if (newRole === 'manager') {
-        currentUser = {
-            id: 'USR-003',
-            name: 'Drs. Hendrawan, M.Si. (Estate Manager)',
-            email: 'hendrawan@pt-emj.co.id',
-            role: 'manager',
-            avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80'
-        };
-    }
-
-    localStorage.setItem('sawit_current_user', JSON.stringify(currentUser));
-    applyRolePermissions();
-    showToast(`Beralih peran ke: ${currentUser.role.toUpperCase()}`, 'success');
-}
-
-function openEditProfileModal() {
-    let modal = document.getElementById('editProfileModal');
-    if (!modal) {
-        createEditProfileModal();
-        modal = document.getElementById('editProfileModal');
-    }
-
-    document.getElementById('profileName').value = currentUser.name;
-    document.getElementById('profileEmail').value = currentUser.email;
-    modal.classList.add('show');
-}
-
-function createEditProfileModal() {
-    const html = `
-    <div class="modal-overlay" id="editProfileModal">
-        <div class="modal-card">
-            <div class="modal-header-clean">
-                <div class="modal-title-group">
-                    <i class="fas fa-user-edit text-emerald text-xl"></i>
-                    <div>
-                        <h4 class="m-0 font-bold">Edit Profil Pengguna</h4>
-                        <p class="text-xs text-muted m-0">Perbarui identitas akun Anda di sistem</p>
-                    </div>
-                </div>
-                <button type="button" class="btn-close-modal" onclick="document.getElementById('editProfileModal').classList.remove('show')">&times;</button>
-            </div>
-            
-            <div class="modal-body-clean">
-                <div class="text-center mb-3">
-                    <img id="profilePreviewImg" src="${currentUser.avatar}" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--emerald);">
-                    <div class="mt-2 text-xs text-muted">Role Saat Ini: <b class="text-emerald">${currentUser.role.toUpperCase()}</b></div>
-                </div>
-                
-                <div class="form-group-clean mb-2">
-                    <label class="form-label-xs">Nama Lengkap</label>
-                    <input type="text" id="profileName" class="form-control-clean">
-                </div>
-                <div class="form-group-clean mb-2">
-                    <label class="form-label-xs">Email / No. HP</label>
-                    <input type="email" id="profileEmail" class="form-control-clean">
-                </div>
-            </div>
-            
-            <div class="modal-footer-clean">
-                <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('editProfileModal').classList.remove('show')">Batal</button>
-                <button type="button" class="btn btn-emerald btn-sm" onclick="saveProfileChanges()">Simpan Perubahan</button>
-            </div>
-        </div>
-    </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', html);
-}
-
-function saveProfileChanges() {
-    const name = document.getElementById('profileName').value.trim();
-    const email = document.getElementById('profileEmail').value.trim();
-
-    if (!name) {
-        showToast('Nama lengkap tidak boleh kosong', 'error');
-        return;
-    }
-
-    currentUser.name = name;
-    currentUser.email = email;
-    localStorage.setItem('sawit_current_user', JSON.stringify(currentUser));
-    updateUserDisplay();
-    document.getElementById('editProfileModal').classList.remove('show');
-    showToast('Profil pengguna berhasil diperbarui!', 'success');
-}
-
-function handleLogout() {
-    if (confirm('Apakah Anda yakin ingin keluar dari sistem?')) {
-        localStorage.removeItem('sawit_current_user');
-        window.location.reload();
-    }
-}
-
-function initCompanySettingsUI() {
-    const comp = getCompanySettings();
-    const topBrand = document.querySelector('.logo-text');
-    if (topBrand) {
-        topBrand.innerHTML = `${comp.company_abbr || 'PT. EMJ'}<span class="highlight"> GIS</span>`;
-    }
-}
-
-function saveCompanySettingsFromUI() {
-    if (currentUser.role !== 'admin') {
-        showToast('Hanya Administrator yang memiliki akses mengubah identitas perusahaan.', 'error');
-        return;
-    }
-
-    const settings = {
-        company_name: document.getElementById('setCompanyName')?.value || 'PT. ENERGI MAJU JAYA',
-        company_abbr: document.getElementById('setCompanyAbbr')?.value || 'PT. EMJ',
-        estate_name: document.getElementById('setEstateName')?.value || 'Estate Sei Semujur',
-        standard_sph: document.getElementById('setStandardSph')?.value || '138',
-        address: document.getElementById('setCompanyAddress')?.value || '',
-        contact: document.getElementById('setCompanyContact')?.value || '',
-        sign_mandor: document.getElementById('setSignMandor')?.value || 'Joko Susanto',
-        sign_asisten: document.getElementById('setSignAsisten')?.value || 'Ir. Bambang Wijaya',
-        sign_manager: document.getElementById('setSignManager')?.value || 'Drs. Hendrawan, M.Si.'
-    };
-
-    localStorage.setItem('sawit_company_settings', JSON.stringify(settings));
-    initCompanySettingsUI();
-    showToast('Pengaturan identitas perusahaan PT. EMJ berhasil disimpan!', 'success');
-}
-
 // ===== DASHBOARD RENDERING =====
 function renderDashboard(blocks, reports) {
     const comp = getCompanySettings();
@@ -1107,6 +1174,8 @@ function renderTrendPenanamanChart(reports) {
     const dataLubang = sortedDates.map(d => parseFloat(dates[d].lubang.toFixed(2)));
     const dateLabels = sortedDates.map(d => formatDateShort(d));
 
+    const emeraldColor = getComputedStyle(document.documentElement).getPropertyValue('--emerald').trim() || '#10b981';
+
     if (chartTrendInstance) chartTrendInstance.destroy();
 
     chartTrendInstance = new Chart(ctx, {
@@ -1117,13 +1186,13 @@ function renderTrendPenanamanChart(reports) {
                 {
                     label: 'Tanam (Ha)',
                     data: dataTanam,
-                    borderColor: '#10b981',
+                    borderColor: emeraldColor,
                     backgroundColor: 'rgba(16, 185, 129, 0.12)',
                     fill: true,
                     tension: 0.35,
                     borderWidth: 2,
                     pointRadius: 3.5,
-                    pointBackgroundColor: '#10b981'
+                    pointBackgroundColor: emeraldColor
                 },
                 {
                     label: 'Lubang Tanam (Ha)',
@@ -1158,6 +1227,8 @@ function renderProgressPerBlokChart(blocks) {
 
     if (chartBlokInstance) chartBlokInstance.destroy();
 
+    const emeraldColor = getComputedStyle(document.documentElement).getPropertyValue('--emerald').trim() || '#10b981';
+
     chartBlokInstance = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -1165,7 +1236,7 @@ function renderProgressPerBlokChart(blocks) {
             datasets: [{
                 label: 'Progress Tanam (%)',
                 data: blocks.map(b => b.persentase),
-                backgroundColor: blocks.map(b => b.status === 'Selesai' ? '#10b981' : b.status === 'Sedang Berjalan' ? '#f59e0b' : '#ef4444'),
+                backgroundColor: blocks.map(b => b.status === 'Selesai' ? emeraldColor : b.status === 'Sedang Berjalan' ? '#f59e0b' : '#ef4444'),
                 borderRadius: 3,
                 barThickness: 24
             }]
@@ -1251,52 +1322,7 @@ function viewPhotoModal(url) {
     document.getElementById('viewerImage').src = url;
     modal.classList.add('show');
 }
-
-function initNavigation() {
-    const menuItems = document.querySelectorAll('.menu-item');
-    const pages = document.querySelectorAll('.page');
-    const hamburger = document.getElementById('hamburgerMenu');
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('mainContent');
-
-    menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-            menuItems.forEach(m => m.classList.remove('active'));
-            pages.forEach(p => p.classList.remove('active'));
-
-            item.classList.add('active');
-            const targetId = item.getAttribute('data-target');
-            const targetPage = document.getElementById(targetId);
-            if (targetPage) targetPage.classList.add('active');
-
-            if (targetId === 'page-map' && typeof initMap === 'function') {
-                setTimeout(initMap, 100);
-            } else if (targetId === 'page-form' && typeof initForm === 'function') {
-                setTimeout(initForm, 100);
-            } else if (targetId === 'page-upload' && typeof initUploadZone === 'function') {
-                setTimeout(initUploadZone, 100);
-            } else if (targetId === 'page-settings') {
-                loadCompanySettingsToForm();
-                renderMasterBlokTable();
-            }
-
-            if (window.innerWidth <= 768 && sidebar) {
-                sidebar.classList.remove('expanded');
-            }
-        });
-    });
-
-    if (hamburger && sidebar) {
-        hamburger.addEventListener('click', () => {
-            sidebar.classList.toggle('expanded');
-            sidebar.classList.toggle('collapsed');
-            if (mainContent) mainContent.classList.toggle('expanded');
-            setTimeout(() => {
-                if (typeof map !== 'undefined' && map) map.invalidateSize();
-            }, 300);
-        });
-    }
-}
+window.openPhotoViewerModal = viewPhotoModal;
 
 function loadCompanySettingsToForm() {
     const comp = getCompanySettings();
@@ -1311,6 +1337,28 @@ function loadCompanySettingsToForm() {
     setVal('setSignMandor', comp.sign_mandor);
     setVal('setSignAsisten', comp.sign_asisten);
     setVal('setSignManager', comp.sign_manager);
+}
+
+function saveCompanySettingsFromUI() {
+    if (currentUser.role !== 'admin') {
+        showToast('Hanya Administrator yang memiliki akses mengubah identitas perusahaan.', 'error');
+        return;
+    }
+
+    const settings = {
+        company_name: document.getElementById('setCompanyName')?.value || 'PT. ENERGI MAJU JAYA',
+        company_abbr: document.getElementById('setCompanyAbbr')?.value || 'PT. EMJ',
+        estate_name: document.getElementById('setEstateName')?.value || 'Estate Sei Semujur',
+        standard_sph: document.getElementById('setStandardSph')?.value || '138',
+        address: document.getElementById('setCompanyAddress')?.value || '',
+        contact: document.getElementById('setCompanyContact')?.value || '',
+        sign_mandor: document.getElementById('setSignMandor')?.value || 'Joko Susanto',
+        sign_asisten: document.getElementById('setSignAsisten')?.value || 'Ir. Bambang Wijaya',
+        sign_manager: document.getElementById('setSignManager')?.value || 'Drs. Hendrawan, M.Si.'
+    };
+
+    localStorage.setItem('sawit_company_settings', JSON.stringify(settings));
+    showToast('Pengaturan identitas perusahaan PT. EMJ berhasil disimpan!', 'success');
 }
 
 function formatDateShort(dateStr) {

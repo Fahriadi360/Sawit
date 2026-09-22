@@ -214,25 +214,82 @@ function getCurrentPosition() {
     );
 }
 
-/**
- * Handle Foto Kamera
- */
-function handlePhotoSelect(e) {
-    const file = e.target.files[0];
-    if (!file) return;
+let currentUploadedPhotos = [];
 
-    const reader = new FileReader();
-    reader.onload = function (ev) {
-        const cameraArea = document.querySelector('.camera-capture');
-        if (cameraArea) {
-            cameraArea.innerHTML = `
-                <img src="${ev.target.result}" style="max-height: 180px; width: auto; border-radius: 4px; object-fit: cover;">
-                <p class="text-xs text-muted mt-2">📸 Foto berhasil diambil. Klik untuk ganti.</p>
-            `;
-            cameraArea.dataset.photo = ev.target.result;
+/**
+ * Toggle Input Manual saat Jenis Kegiatan = 'Lainnya'
+ */
+function toggleManualKegiatanInput() {
+    const sel = document.getElementById('selectKegiatan');
+    const grp = document.getElementById('groupKegiatanManual');
+    const inp = document.getElementById('kegiatanManual');
+    if (!sel || !grp) return;
+
+    if (sel.value === 'Lainnya') {
+        grp.style.display = 'block';
+        if (inp) {
+            inp.required = true;
+            inp.focus();
         }
-    };
-    reader.readAsDataURL(file);
+    } else {
+        grp.style.display = 'none';
+        if (inp) inp.required = false;
+    }
+    handleKegiatanChange(sel.value);
+}
+
+/**
+ * Multi-Foto Lapangan: Tangani pemilihan banyak foto (5-8 foto)
+ */
+function handleMultiplePhotosSelected(e) {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    const remainingQuota = 8 - currentUploadedPhotos.length;
+    if (remainingQuota <= 0) {
+        if (typeof showToast === 'function') showToast('Batas maksimal 8 foto dokumentasi telah tercapai.', 'warning');
+        return;
+    }
+
+    const filesToProcess = files.slice(0, remainingQuota);
+
+    filesToProcess.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+            currentUploadedPhotos.push(ev.target.result);
+            renderPhotoPreviewGrid();
+        };
+        reader.readAsDataURL(file);
+    });
+
+    e.target.value = ''; // Reset input agar pengguna bisa menambah lagi
+}
+
+function removeUploadedPhoto(index) {
+    if (index >= 0 && index < currentUploadedPhotos.length) {
+        currentUploadedPhotos.splice(index, 1);
+        renderPhotoPreviewGrid();
+    }
+}
+
+function renderPhotoPreviewGrid() {
+    const grid = document.getElementById('photoPreviewGrid');
+    const badge = document.getElementById('photoQuotaBadge');
+    if (badge) badge.textContent = `${currentUploadedPhotos.length} / 8 Foto Terpilih`;
+    if (!grid) return;
+
+    if (currentUploadedPhotos.length === 0) {
+        grid.innerHTML = '';
+        return;
+    }
+
+    grid.innerHTML = currentUploadedPhotos.map((src, idx) => `
+        <div class="photo-preview-item">
+            <img src="${src}" alt="Dokumentasi ${idx + 1}" onclick="if(typeof viewPhotoModal==='function') viewPhotoModal('${src}')">
+            <button type="button" class="btn-remove-photo" onclick="removeUploadedPhoto(${idx})" title="Hapus Foto">&times;</button>
+            <span class="photo-index-tag">#${idx + 1}</span>
+        </div>
+    `).join('');
 }
 
 /**
@@ -277,6 +334,11 @@ async function submitReportPTEMJ() {
     const idBlok = document.getElementById('selectBlok').value;
     const meta = BLOK_METADATA[idBlok] || { luas_ha: 6.66 };
 
+    const selKegiatan = document.getElementById('selectKegiatan').value;
+    const kegiatanFinal = selKegiatan === 'Lainnya' 
+        ? (document.getElementById('kegiatanManual')?.value.trim() || 'Kegiatan Lapangan Lainnya')
+        : selKegiatan;
+
     const newRecord = {
         action: 'submitReport',
         id_laporan: `LPR-${new Date().getTime().toString().slice(-6)}`,
@@ -285,96 +347,99 @@ async function submitReportPTEMJ() {
         luas_ha: meta.luas_ha,
         jml_tenaga_kerja: parseInt(document.getElementById('jmlTenagaKerja').value) || 1,
         nama_tenaga_kerja: document.getElementById('namaTenagaKerja').value || 'Pekerja Lapangan',
-        kegiatan: document.getElementById('selectKegiatan').value,
-        uom: document.getElementById('selectUom').value,
-        realisasi_jml: parseFloat(document.getElementById('realisasiJumlah').value) || 0,
-        todate: parseFloat(document.getElementById('todateJumlah').value) || 0,
-        sisa_ha: document.getElementById('sisaHa').value,
-        keterangan: document.getElementById('catatanKegiatan').value || '',
-        lat_gps: gpsLat ? (gpsLat.dataset.value || -1.107) : -1.107,
-        lng_gps: gpsLng ? (gpsLng.dataset.value || 102.156) : 102.156,
-        foto_url: cameraArea ? (cameraArea.dataset.photo || '') : ''
-    };
+            kegiatan: kegiatanFinal,
+            uom: document.getElementById('selectUom').value,
+            realisasi_jml: parseFloat(document.getElementById('realisasiJumlah').value) || 0,
+            todate: parseFloat(document.getElementById('todateJumlah').value) || 0,
+            sisa_ha: document.getElementById('sisaHa').value,
+            keterangan: document.getElementById('catatanKegiatan').value || '',
+            lat_gps: gpsLat ? (gpsLat.dataset.value || -1.107) : -1.107,
+            lng_gps: gpsLng ? (gpsLng.dataset.value || 102.156) : 102.156,
+            foto_url: currentUploadedPhotos[0] || (cameraArea ? (cameraArea.dataset.photo || '') : ''),
+            foto_kegiatan: currentUploadedPhotos.length > 0 ? [...currentUploadedPhotos] : (cameraArea?.dataset.photo ? [cameraArea.dataset.photo] : [])
+        };
 
-    // Jika mode Demo atau GAS URL default
-    if (typeof IS_DEMO !== 'undefined' && IS_DEMO) {
-        setTimeout(() => {
-            // Masukkan ke local appData
-            if (typeof appData !== 'undefined' && appData.reports) {
-                appData.reports.unshift(newRecord);
-                if (typeof renderDashboard === 'function') renderDashboard(appData.blocks, appData.reports);
-                if (typeof renderRekapTable === 'function') renderRekapTable(appData.reports);
-                if (typeof addGPSMarkers === 'function') addGPSMarkers(appData.reports);
+        // Jika mode Demo atau GAS URL default
+        if (typeof IS_DEMO !== 'undefined' && IS_DEMO) {
+            setTimeout(() => {
+                // Masukkan ke local appData
+                if (typeof appData !== 'undefined' && appData.reports) {
+                    appData.reports.unshift(newRecord);
+                    if (typeof renderDashboard === 'function') renderDashboard(appData.blocks, appData.reports);
+                    if (typeof renderRekapTable === 'function') renderRekapTable(appData.reports);
+                    if (typeof addGPSMarkers === 'function') addGPSMarkers(appData.reports);
+                }
+
+                resetFormPTEMJ();
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-save mr-1"></i> Simpan Laporan';
+                }
+
+                // Tampilkan Modal Sukses
+                const modal = document.getElementById('successModal');
+                if (modal) modal.classList.add('show');
+
+                if (typeof showToast === 'function') showToast('Laporan kegiatan PT. EMJ berhasil disimpan (Demo)', 'success');
+            }, 1000);
+            return;
+        }
+
+        // Mode Live GAS
+        try {
+            const response = await fetch(GAS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newRecord)
+            });
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                if (typeof appData !== 'undefined' && appData.reports) {
+                    newRecord.id_laporan = result.id_laporan;
+                    newRecord.foto_url = result.foto_url || newRecord.foto_url;
+                    appData.reports.unshift(newRecord);
+                    if (typeof renderDashboard === 'function') renderDashboard(appData.blocks, appData.reports);
+                }
+                resetFormPTEMJ();
+                const modal = document.getElementById('successModal');
+                if (modal) modal.classList.add('show');
+                if (typeof showToast === 'function') showToast('Laporan berhasil dikirim ke Google Sheets!', 'success');
+            } else {
+                if (typeof showToast === 'function') showToast('Gagal: ' + result.message, 'error');
             }
-
-            resetFormPTEMJ();
+        } catch (err) {
+            console.error('Submit error:', err);
+            if (typeof showToast === 'function') showToast('Gagal mengirim ke server GAS. Cek koneksi.', 'error');
+        } finally {
             if (btn) {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-save mr-1"></i> Simpan Laporan';
             }
-
-            // Tampilkan Modal Sukses
-            const modal = document.getElementById('successModal');
-            if (modal) modal.classList.add('show');
-
-            if (typeof showToast === 'function') showToast('Laporan kegiatan PT. EMJ berhasil disimpan (Demo)', 'success');
-        }, 1200);
-        return;
-    }
-
-    // Mode Live GAS
-    try {
-        const response = await fetch(GAS_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newRecord)
-        });
-        const result = await response.json();
-
-        if (result.status === 'success') {
-            if (typeof appData !== 'undefined' && appData.reports) {
-                newRecord.id_laporan = result.id_laporan;
-                newRecord.foto_url = result.foto_url || newRecord.foto_url;
-                appData.reports.unshift(newRecord);
-                if (typeof renderDashboard === 'function') renderDashboard(appData.blocks, appData.reports);
-            }
-            resetFormPTEMJ();
-            const modal = document.getElementById('successModal');
-            if (modal) modal.classList.add('show');
-            if (typeof showToast === 'function') showToast('Laporan berhasil dikirim ke Google Sheets!', 'success');
-        } else {
-            if (typeof showToast === 'function') showToast('Gagal: ' + result.message, 'error');
-        }
-    } catch (err) {
-        console.error('Submit error:', err);
-        if (typeof showToast === 'function') showToast('Gagal mengirim ke server GAS. Cek koneksi.', 'error');
-    } finally {
-        if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-save mr-1"></i> Simpan Laporan';
         }
     }
-}
 
-/**
- * Reset Form
- */
-function resetFormPTEMJ() {
-    const form = document.getElementById('formKegiatanPTEMJ');
-    if (form) form.reset();
+    /**
+     * Reset Form
+     */
+    function resetFormPTEMJ() {
+        const form = document.getElementById('formKegiatanPTEMJ');
+        if (form) form.reset();
 
-    const tglInput = document.getElementById('tglKegiatan');
-    if (tglInput) tglInput.value = new Date().toISOString().split('T')[0];
+        const tglInput = document.getElementById('tglKegiatan');
+        if (tglInput) tglInput.value = new Date().toISOString().split('T')[0];
 
-    const cameraArea = document.querySelector('.camera-capture');
-    if (cameraArea) {
-        cameraArea.innerHTML = `
-            <i class="fas fa-camera camera-icon"></i>
-            <p class="text-xs text-muted m-0">Klik untuk mengambil foto bukti lapangan</p>
-        `;
-        cameraArea.dataset.photo = '';
+        const grp = document.getElementById('groupKegiatanManual');
+        if (grp) grp.style.display = 'none';
+
+        currentUploadedPhotos = [];
+        renderPhotoPreviewGrid();
+
+        const cameraArea = document.querySelector('.camera-capture');
+        if (cameraArea) {
+            cameraArea.dataset.photo = '';
+        }
+
+        const selectBlok = document.getElementById('selectBlok');
+        if (selectBlok && selectBlok.value) handleBlokChange(selectBlok.value);
     }
-
-    const selectBlok = document.getElementById('selectBlok');
-    if (selectBlok && selectBlok.value) handleBlokChange(selectBlok.value);
-}

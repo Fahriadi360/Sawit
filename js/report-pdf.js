@@ -417,33 +417,71 @@ function buildReportTemplate(filteredReports) {
         `;
     });
 
-    // Galeri Foto Lapangan
+    // Galeri Foto Lapangan (Mendukung Multi-Foto 5-8 Foto per kegiatan)
     let photoGrid = '';
     if (incPhotos) {
-        const photoReports = filteredReports.filter(r => r.foto_url || r.foto || r.foto_base64);
-        if (photoReports.length > 0) {
+        let allPhotoItems = [];
+        filteredReports.forEach(p => {
+            if (Array.isArray(p.foto_kegiatan) && p.foto_kegiatan.length > 0) {
+                p.foto_kegiatan.forEach((imgSrc, idx) => {
+                    if (imgSrc) {
+                        allPhotoItems.push({
+                            img: imgSrc,
+                            blok: p.id_blok,
+                            kegiatan: p.kegiatan,
+                            tanggal: p.tanggal || p.tanggal_tanam,
+                            pekerja: p.nama_tenaga_kerja,
+                            lat: p.lat_gps || p.lat,
+                            lng: p.lng_gps || p.lng,
+                            index: idx + 1,
+                            total: p.foto_kegiatan.length
+                        });
+                    }
+                });
+            } else {
+                const singleImg = p.foto_url || p.foto || p.foto_base64;
+                if (singleImg) {
+                    allPhotoItems.push({
+                        img: singleImg,
+                        blok: p.id_blok,
+                        kegiatan: p.kegiatan,
+                        tanggal: p.tanggal || p.tanggal_tanam,
+                        pekerja: p.nama_tenaga_kerja,
+                        lat: p.lat_gps || p.lat,
+                        lng: p.lng_gps || p.lng,
+                        index: 1,
+                        total: 1
+                    });
+                }
+            }
+        });
+
+        if (allPhotoItems.length > 0) {
             let photoCards = '';
-            photoReports.slice(0, 6).forEach(p => {
-                const img = p.foto_url || p.foto || p.foto_base64;
+            // Tampilkan foto dokumentasi (hingga 8 foto dalam grid landscape 4 kolom)
+            allPhotoItems.slice(0, 8).forEach(p => {
                 photoCards += `
-                    <div style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px; background: #fff; width: 31%; box-sizing: border-box;">
-                        <div style="height: 120px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #0f172a; border-radius: 3px;">
-                            <img src="${img}" style="max-height: 120px; max-width: 100%; object-fit: cover;">
+                    <div style="border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px; background: #fff; width: 23.5%; box-sizing: border-box;">
+                        <div style="height: 105px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #0f172a; border-radius: 3px; position: relative;">
+                            <img src="${p.img}" style="max-height: 105px; max-width: 100%; object-fit: cover;">
+                            ${p.total > 1 ? `<span style="position: absolute; bottom: 3px; right: 3px; background: rgba(0,0,0,0.75); color: #34d399; font-size: 6.5pt; font-weight: bold; padding: 1px 4px; border-radius: 2px;">#${p.index}/${p.total}</span>` : ''}
                         </div>
-                        <div style="margin-top: 5px; font-size: 7.5pt; color: #334155;">
-                            <b>${p.id_blok} - ${p.kegiatan}</b><br>
-                            📅 ${formatDateIndo(p.tanggal || p.tanggal_tanam)} | 👤 ${p.nama_tenaga_kerja ? p.nama_tenaga_kerja.substring(0, 25) : '-'}<br>
-                            📍 GPS: ${p.lat_gps || p.lat || '-'}, ${p.lng_gps || p.lng || '-'}
+                        <div style="margin-top: 5px; font-size: 7pt; color: #334155; line-height: 1.3;">
+                            <b>${p.blok} - ${p.kegiatan}</b><br>
+                            📅 ${formatDateIndo(p.tanggal)}<br>
+                            👤 ${p.pekerja ? p.pekerja.substring(0, 20) : '-'}<br>
+                            📍 GPS: ${p.lat ? (typeof p.lat === 'number' ? p.lat.toFixed(5) : p.lat) : '-'}, ${p.lng ? (typeof p.lng === 'number' ? p.lng.toFixed(5) : p.lng) : '-'}
                         </div>
                     </div>
                 `;
             });
             photoGrid = `
                 <div style="margin-top: 15px; page-break-inside: avoid;">
-                    <div style="font-weight: bold; font-size: 10pt; color: #0f2942; border-bottom: 1.5px solid #0f2942; padding-bottom: 3px; margin-bottom: 8px;">
-                        LAMPIRAN DOKUMENTASI FOTO LAPANGAN
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid #0f2942; padding-bottom: 3px; margin-bottom: 8px;">
+                        <span style="font-weight: bold; font-size: 9.5pt; color: #0f2942;">LAMPIRAN DOKUMENTASI FOTO LAPANGAN (${allPhotoItems.length} Foto Tersedia)</span>
+                        <span style="font-size: 7.5pt; color: #64748b;">Standar Audit & Verifikasi Lapangan PT. EMJ</span>
                     </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                         ${photoCards}
                     </div>
                 </div>
